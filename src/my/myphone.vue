@@ -35,6 +35,9 @@
   Vue.use(Router)
   const router = new Router()
   export default {
+    created () {
+      document.title = '修改手机号'
+    },
     ready () {
     },
     components: {

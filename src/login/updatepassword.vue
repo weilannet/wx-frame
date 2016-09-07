@@ -39,6 +39,9 @@
   Vue.use(Router)
   const router = new Router()
   export default {
+    created () {
+      document.title = '忘记密码'
+    },
     ready () {
     },
     components: {

@@ -29,20 +29,19 @@
   }
 </style>
 <script>
-  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
+  import { XButton, Group, Cell, Box, Icon } from '../components'
   export default {
+    created () {
+      document.title = '确认报名'
+    },
     ready () {
     },
     components: {
-      Selector,
-      PopupPicker,
-      XInput,
       XButton,
       Group,
       Cell,
       Box,
-      Icon,
-      XTextarea
+      Icon
     },
     data () {
       return {

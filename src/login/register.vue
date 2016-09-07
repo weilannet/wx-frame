@@ -8,7 +8,7 @@
     <group title="">
 
       <x-input title="验证码" class="weui_vcode" >
-      <x-button slot="right" type="primary" :disabled="codedisable" @click="codeClick" :text="codevalue"></x-button>
+      <x-button slot="right" type="primary" :disabled="codedisable" @click="codeClick" :text.sync="codevalue"></x-button>
       </x-input>
 
     </group>
@@ -24,7 +24,7 @@
     <box gap="20px 10px" class="forgotpassword">
       <span>我已阅读并同意</span><a v-link="{ path: '/agreement' }">《同仁服务协议》</a>
     </box>
-    <toast :show.sync="showToast" :time="1000">注册成功</toast>
+    <toast :show.sync="showToast" :time="1000">注册成功,3s后跳转</toast>
     <!--<other-component/>-->
   </div>
 </template>
@@ -36,11 +36,10 @@
 </style>
 <script>
   import { Toast, XInput, Group, XButton, Cell, Box, Icon } from '../components'
-  import Router from 'vue-router'
-  import Vue from 'vue'
-  Vue.use(Router)
-  const router = new Router()
   export default {
+    created () {
+      document.title = '注册'
+    },
     ready () {
     },
     components: {
@@ -75,18 +74,24 @@
         this.submitdisable = true
         var data = {
           phone: this.txtmobile,
-          password: this.txtpwd
+          password: this.txtpwd,
+          blogId: '57c67ece446543841fd8f577'
         }
         console.log(JSON.stringify(data))
         this.showToast = true
+        null && this.$http.post('/getBlog', data).then(function (result) {
+          console.log(result.data)
+        }, function () {
+        })
+        var that = this
         setTimeout(function () {
-          router.go(
+          that.$router.go(
             {
               path: '/login',
               params: null
             }
           )
-        }, 1000)
+        }, 3000)
       },
       finish (index) {
         if (this.interval) {

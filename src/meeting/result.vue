@@ -18,7 +18,7 @@
         <span>会议识别码：9838834834</span>
         <br/>
         <br/>
-        <a v-link="{ path: '/personinfo' }">查看会议详情</a>
+        <a v-link="{ path: '/meeting' }">查看会议详情</a>
       </div>
       <box gap="30px 10px">
         <a v-link="{ path: '/' }"><x-button  :text="submit001"  type="primary" @click="processButton001">确定</x-button></a>
@@ -34,20 +34,17 @@
 </style>
 <script>
   import Qrcode from '../components/qrcode'
-  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
+  import { XButton, Box, Icon } from '../components'
   export default {
+    created () {
+      document.title = '报名成功'
+    },
     ready () {
     },
     components: {
-      Selector,
-      PopupPicker,
-      XInput,
       XButton,
-      Group,
-      Cell,
       Box,
       Icon,
-      XTextarea,
       Qrcode
     },
     data () {

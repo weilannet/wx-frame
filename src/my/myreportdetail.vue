@@ -2,31 +2,32 @@
   <div>
     <!--<header-component/>-->
     <div class="myreport-info">
-      <div class="success"><icon type="success" class="icon_big"></icon>患者确认就诊</div>
+
+      <div class="success">
+        <div  v-show="model.state==0"><icon type="info" class="icon_big"></icon>待处理</div>
+        <div  v-show="model.state==1"><icon type="info"></icon>接收</div>
+        <div  v-show="model.state==2"><icon type="warn"></icon>拒绝</div>
+        <div  v-show="model.state==3"><icon type="success" class="icon_big"></icon>患者确认就诊</div>
+      </div>
 
       <div class="arrange">
-        <span>就诊安排：</span>
+        <span>{{ model.state === 2?'拒绝理由:':'就诊安排：'}}  </span>
         <br/>
-        <span>已安排高新患者于2015年02月12日201诊室就诊</span>
-
+        <span>{{template===''?'无':template}}</span>
       </div>
 
 
     </div>
 
-    <group>
-        <cell title="高新&nbsp;&nbsp;女&nbsp;&nbsp;25" value="18611043925"></cell>
+    <group class="myreport-item">
+      <cell :title="model.realName+'&nbsp;&nbsp;'+(model.sex==0?'女':'男')+'&nbsp;&nbsp;'+model.age" >{{model.phone}}</cell>
     </group>
         <div class="myreport-title">基本诊断：</div>
         <div class="myreport-content">
-          1.需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理……
-          <br/>2.需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理……
-          <br/>3.需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理……
-          <br/>4.需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理……
-          <img   src="http://udongman.oss.aliyuncs.com/image/2014/1022/20141022104422934.jpg"  >
-          <img   src="http://udongman.oss.aliyuncs.com/image/2014/1022/20141022104422934.jpg" >
-          <img   src="http://udongman.oss.aliyuncs.com/image/2014/1022/20141022104422934.jpg" >
-
+          {{ model.checkInfo }}
+          <div  v-for="item in model.images" track-by="$index">
+          <img  src="{{ item }}"  />
+          </div>
         </div>
 
 
@@ -39,31 +40,49 @@
   }
 </style>
 <script>
-  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Sticky, Tab, TabItem, Swiper, SwiperItem, Card } from '../components'
+  import { Group, Cell, Icon } from '../components'
   export default {
+    created () {
+      document.title = '病历详情'
+      Object.assign(this.model, this.$route.query)
+      switch (parseInt(this.model.state)) {
+        case 0:
+          this.template = ''
+          break
+        case 1:
+          this.template = `已安排${this.model.realName}患者于${this.model.bookTime}在${this.model.catetoryRoom}诊室就诊！`
+          break
+        case 2:
+          this.template = this.model.refuseContent && this.model.refuseContent || ''
+          break
+        case 3:
+          this.template = `已安排${this.model.realName}患者于${this.model.bookTime}在${this.model.catetoryRoom}诊室就诊！`
+          break
+      }
+    },
     ready () {
     },
     components: {
-      Selector,
-      PopupPicker,
-      XInput,
-      XButton,
       Group,
       Cell,
-      Box,
-      Icon,
-      Sticky,
-      Tab,
-      TabItem,
-      Swiper,
-      SwiperItem,
-      Card
+      Icon
     },
     data () {
       return {
-        value: '',
-        index: 0,
-        demo2: '待处理'
+        template: '',
+        model: {
+          id: '',
+          realName: '',
+          sex: 0,
+          age: 0,
+          state: 0,
+          checkInfo: '',
+          images: [],
+          phone: '',
+          bookTime: '',
+          catetoryRoom: '',
+          refuseContent: ''
+        }
       }
     },
     methods: {
@@ -114,5 +133,4 @@
   .myreport-content  img {
     width: 100%;
   }
-
 </style>

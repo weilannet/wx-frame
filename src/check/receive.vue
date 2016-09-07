@@ -26,6 +26,9 @@
 <script>
   import { Datetime, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon } from '../components'
   export default {
+    created () {
+      document.title = '接收病历'
+    },
     ready () {
     },
     components: {

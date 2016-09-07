@@ -24,6 +24,9 @@
 <script>
   import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
   export default {
+    created () {
+      document.title = '接收成功'
+    },
     ready () {
     },
     components: {

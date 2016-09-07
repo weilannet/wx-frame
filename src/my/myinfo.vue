@@ -17,9 +17,9 @@
     </group>
 
     <box gap="30px 10px">
-      <a v-link="{ path: '/' }"><x-button  :disabled="submitdisable" :text="submittext"  type="primary" @click="btnSubmit"></x-button></a>
+     <x-button  :disabled="submitdisable" :text="submittext"  type="primary" @click="btnSubmit"></x-button>
     </box>
-
+    <toast :show.sync="showToast" :time="1000">保存成功</toast>
     <!--<other-component/>-->
   </div>
 </template>
@@ -29,14 +29,18 @@
   }
 </style>
 <script>
-  import { PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Address, AddressChinaData } from '../components'
+  import { Toast, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Address, AddressChinaData } from '../components'
   export default {
+    created () {
+      this.pageindex = 1
+    },
     ready () {
       this.txtmobile = '186****3925'
       this.txtname = '高新'
       this.txthospital = '人民医院'
     },
     components: {
+      Toast,
       PopupPicker,
       XInput,
       XButton,
@@ -58,13 +62,19 @@
         txtprofessor: ['主治医师'],
         lstdepart: [['眼底科', '青光眼科', '眼外伤科']],
         lstprofessor: [['主治医师', '主任医师', '副主任医师']],
-        txtaddress: ['广东省', '深圳市', '南山区'],
+        txtaddress: ['北京市', '北京市市辖区', '朝阳区'],
         titlecity: '城市',
         submittext: '保存',
-        submitdisable: false
+        submitdisable: false,
+        showToast: false
       }
     },
     methods: {
+      created () {
+      },
+      ready () {
+        document.title = '个人信息'
+      },
       onChange (val) {
         console.log(val)
       },
@@ -83,6 +93,16 @@
       btnSubmit () {
         this.submittext = '正在提交'
         this.submitdisable = true
+        this.showToast = true
+        var that = this
+        setTimeout(function () {
+          that.$router.go(
+            {
+              path: '/',
+              params: null
+            }
+          )
+        }, 3000)
       }
     }
   }

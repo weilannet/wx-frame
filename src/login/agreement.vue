@@ -33,6 +33,9 @@
 <script>
   import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box } from '../components'
   export default {
+    created () {
+      document.title = '服务协议'
+    },
     ready () {
     },
     components: {

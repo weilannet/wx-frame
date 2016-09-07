@@ -7,7 +7,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../site/static'),
-    publicPath: 'http://91weilan.com/trapp/static/',
+    publicPath: './static/',
     filename: '[name].js'
   },
   stats: {

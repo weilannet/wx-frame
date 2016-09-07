@@ -43,6 +43,9 @@
 <script>
   import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Flexbox, FlexboxItem } from '../components'
   export default {
+    created () {
+      document.title = '病历审核'
+    },
     ready () {
     },
     components: {

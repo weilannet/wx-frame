@@ -19,17 +19,20 @@
        <img   src="http://udongman.oss.aliyuncs.com/image/2014/1022/20141022104422934.jpg" >
 
      </div>
-     <box  class="meeting-sign">
-       <a v-link="{ path: '/' }"><x-button  text="报名参加"  type="primary" @click="btnClick"></x-button></a>
-     </box>
-   </div>
 
+   </div>
+  <box  class="meeting-sign">
+    <a v-link="{ path: '/meetingconfirm' }"><x-button  text="报名参加"  type="primary" @click="btnClick"></x-button></a>
+  </box>
 
 
 </template>
 <script>
   import { XButton, Box } from '../components'
   export default {
+    created () {
+      document.title = '会议报名'
+    },
     ready () {
     },
     components: {

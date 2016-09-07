@@ -32,6 +32,9 @@
 <script>
   import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Address, AddressChinaData } from '../components'
   export default {
+    created () {
+      document.title = '身份认证'
+    },
     ready () {
     },
     components: {
@@ -49,7 +52,7 @@
     data () {
       return {
         addressData: AddressChinaData,
-        txtaddress: ['广东省', '深圳市', '南山区'],
+        txtaddress: ['北京市', '北京市市辖区', '朝阳区'],
         txtname: '',
         txthospital: '',
         titlecity: '城市',

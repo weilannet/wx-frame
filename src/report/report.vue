@@ -47,11 +47,9 @@
       </div>
     </div>
     <box gap="30px 10px">
-      <a v-link="{ path: '/' }">
         <x-button  :text="submit001"  type="primary" @click="processButton001">完成</x-button>
-      </a>
     </box>
-
+    <toast :show.sync="showToast" :time="1000">上报成功</toast>
     <!--<other-component/>-->
   </div>
 </template>
@@ -61,11 +59,12 @@
 
 </style>
 <script>
-  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
+  import { Toast, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
   export default {
     ready () {
     },
     components: {
+      Toast,
       Selector,
       PopupPicker,
       XInput,
@@ -81,10 +80,14 @@
         value: '',
         title1: '性别',
         value1: ['女'],
-        list1: [['男', '女']]
+        list1: [['男', '女']],
+        showToast: false
       }
     },
     methods: {
+      created () {
+        document.title = '病历上报'
+      },
       onChange (val) {
         console.log(val)
       },
@@ -97,6 +100,16 @@
       processButton001 () {
         this.submit001 = '正在提交'
         this.disable001 = true
+        this.showToast = true
+        var that = this
+        setTimeout(function () {
+          that.$router.go(
+            {
+              path: '/',
+              params: null
+            }
+          )
+        }, 3000)
       }
     }
   }

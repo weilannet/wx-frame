@@ -25,6 +25,9 @@
 <script>
   import { XTextarea, Datetime, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon } from '../components'
   export default {
+    created () {
+      document.title = '拒绝理由'
+    },
     ready () {
     },
     components: {

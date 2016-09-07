@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import App from './App'
-
+import VueResource from 'vue-resource'
 import Wechat from './Wechat'
 import Home from './Home'
 import Yi from './yi'
@@ -123,6 +123,9 @@ Vue.config.devtools = true
 Vue.use(Device)
 Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
+Vue.use(VueResource)
+Vue.http.options.root = '/root'
+Vue.http.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk'
 
 const router = new Router()
 
