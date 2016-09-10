@@ -8,11 +8,11 @@
       </h1>
       <p class="vux-notice">同仁微信端演示</p>
     </div>
-    <!--<group>-->
-      <!--<cell title="Demo" link="/demo" value="演示">-->
-        <!--<span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>-->
-      <!--</cell>-->
-    <!--</group>-->
+    <group>
+      <cell title="Demo" link="/demo" value="演示">
+        <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
+      </cell>
+    </group>
     <group>
       <cell title="登录" link="/login" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>

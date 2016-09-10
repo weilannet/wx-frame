@@ -5,15 +5,15 @@
     <!--<cell title="接收新消息通知" value="已启用"></cell>-->
 
     <group title="">
-    <x-input title="姓名" name="username" placeholder="请填写患者姓名" is-type="china-name"></x-input>
-    <popup-picker :title="title1" :data="list1" :value.sync="value1" @on-show="onShow" @on-hide="onHide" @on-change="onChange"></popup-picker>
-    <x-input title="年龄" type="text" placeholder="请填写患者年龄"  :min="1" :max="3"></x-input>
-    <x-input title="手机号码" name="mobile" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile"></x-input>
+    <x-input title="姓名" :value.sync="realName" name="realName" placeholder="请填写患者姓名" is-type="china-name"></x-input>
+    <popup-picker :title="titleSex" :data="lstSex" :value.sync="sex"  @on-show="onShow" @on-hide="onHide" @on-change="onChange"></popup-picker>
+    <x-input title="年龄" :value.sync="age" type="text"  name="age" placeholder="请填写患者年龄"  :min="1" :max="100"></x-input>
+    <x-input title="手机号码" :value.sync="phone" name="phone" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile"></x-input>
   </group>
 
     <group>
       <cell title="基本诊断" value=""></cell>
-      <x-textarea :max="200" placeholder="请输入诊断信息..." :show-counter="false" :height="200" :rows="8" :cols="30"></x-textarea>
+      <x-textarea :max="200"  name="checkInfo"  :value.sync="checkInfo"  placeholder="请输入诊断信息..." :show-counter="false" :height="200" :rows="8" :cols="30"></x-textarea>
     </group>
 
     <div class="weui_cells weui_cells_form">
@@ -22,24 +22,23 @@
           <div class="weui_uploader">
             <div class="weui_uploader_hd weui_cell">
               <div class="weui_cell_bd weui_cell_primary">图片上传</div>
-              <div class="weui_cell_ft">0/2</div>
+              <div class="weui_cell_ft">{{currentCount}}/{{totalCount}}</div>
             </div>
             <div class="weui_uploader_bd">
-              <ul class="weui_uploader_files">
-                <li class="weui_uploader_file" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)"></li>
-                <li class="weui_uploader_file" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)"></li>
-                <li class="weui_uploader_file" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)"></li>
-                <li class="weui_uploader_file weui_uploader_status" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)">
-                  <div class="weui_uploader_status_content">
-                    <i class="weui_icon_warn"></i>
-                  </div>
-                </li>
-                <li class="weui_uploader_file weui_uploader_status" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)">
-                  <div class="weui_uploader_status_content">50%</div>
-                </li>
+              <ul class="weui_uploader_files" v-for="item in images" track-by="$index" >
+                <li class="weui_uploader_file" :style="'background-image:url('+item+')'"><icon type="clear" @click="closeClick($index)" class="icon_big"></icon></li>
+
+                <!--<li class="weui_uploader_file weui_uploader_status" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)">-->
+                  <!--<div class="weui_uploader_status_content">-->
+                    <!--<i class="weui_icon_warn"></i>-->
+                  <!--</div>-->
+                <!--</li>-->
+                <!--<li class="weui_uploader_file weui_uploader_status" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)">-->
+                  <!--<div class="weui_uploader_status_content">50%</div>-->
+                <!--</li>-->
               </ul>
               <div class="weui_uploader_input_wrp">
-                <input class="weui_uploader_input" type="file" accept="image/*" multiple />
+                <input class="weui_uploader_input" ref="imgUp" type="file" accept="image/*" multiple @change="preImg"  />
               </div>
             </div>
           </div>
@@ -47,10 +46,11 @@
       </div>
     </div>
     <box gap="30px 10px">
-        <x-button  :text="submit001"  type="primary" @click="processButton001">完成</x-button>
+        <x-button  :text="titleSubmit" :disabled="disableSubmit" type="primary" @click="btnSubmit"></x-button>
     </box>
     <toast :show.sync="showToast" :time="1000">上报成功</toast>
     <!--<other-component/>-->
+
   </div>
 </template>
 <style lang="less">
@@ -77,11 +77,20 @@
     },
     data () {
       return {
-        value: '',
-        title1: '性别',
-        value1: ['女'],
-        list1: [['男', '女']],
-        showToast: false
+        realName: '',
+        age: '',
+        sex: ['女'],
+        phone: '',
+        checkInfo: '',
+        images: [],
+        imageNames: [],
+        titleSex: '性别',
+        lstSex: [['男', '女']],
+        showToast: false,
+        titleSubmit: '完成',
+        disableSubmit: false,
+        totalCount: 9,
+        currentCount: 0
       }
     },
     methods: {
@@ -90,6 +99,7 @@
       },
       onChange (val) {
         console.log(val)
+        this.sex = val
       },
       onShow () {
         console.log('on show')
@@ -97,19 +107,80 @@
       onHide (type) {
         console.log('on hide', type)
       },
-      processButton001 () {
-        this.submit001 = '正在提交'
-        this.disable001 = true
-        this.showToast = true
-        var that = this
-        setTimeout(function () {
-          that.$router.go(
-            {
-              path: '/',
-              params: null
+      btnSubmit () {
+        this.titleSubmit = '正在提交'
+        this.disableSubmit = true
+        var me = this
+        var data = {
+          realName: this.realName + '111',
+          age: this.age,
+          sex: this.sex,
+          phone: this.phone,
+          checkInfo: this.checkInfo
+        }
+        var imagesAjax = this.images.map(function (value, index) {
+          return new Promise(function (resolve, reject) {
+            me.$http.post('/imgUpload', {pathName: me.realName, imgData: value, imgName: me.imageNames[index]}).then(function (request) {
+              if (request.status === 200) {
+                console.log(request.data.result)
+                resolve(request.data)
+              } else {
+                reject(Error(request.statusText))
+              }
+            })
+          })
+        })
+        Promise.all(imagesAjax).then(values => {
+          debugger
+          console.log(values)
+          data.imagesPath = values
+          me.$http.post('/report', data).then(function (request) {
+            if (request.status === 200) {
+              console.log(request.response)
+            } else {
             }
-          )
-        }, 3000)
+          })
+        })
+      },
+      closeClick (index) {
+        this.images.splice(index, 1)
+        this.imageNames.splice(index, 1)
+      },
+      preImg (event) {
+        if (!this.realName) {
+          this.$vux.alert.show({content: '请先填写病人名称！'})
+          return false
+        }
+        var me = this
+        me.currentCount += event.target.files.length
+        if (this.currentCount > 9) {
+          this.$vux.alert.show({content: '最多可选择9张图片，请重新选择！'})
+          me.currentCount = 0
+          return false
+        }
+        var imgArr = Array.prototype.slice.call(event.target.files)
+        if (!imgArr && imgArr.length > 0) {
+          return
+        }
+        imgArr.forEach(function (img) {
+          // 判断图片格式
+          if (!(img.type.indexOf('image') === 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase()))) {
+            me.$vux.alert.show({content: '图片只能是jpg,gif,png'})
+            return false
+          }
+          console.log(img.size)
+          console.log(img.type)
+          if (img.size > 1024 * 1024) {
+            me.$vux.alert.show({content: '图片大小不可超过1M'})
+            return false
+          }
+          var reader = new FileReader()
+          reader.readAsDataURL(img)
+          reader.onload = function (e) {
+            me.images.push(e.target.result)
+            me.imageNames.push(img.name)
+          }
+        })
       }
     }
   }
