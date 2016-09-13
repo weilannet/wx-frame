@@ -95,7 +95,6 @@ import AlertPlugin from './plugins/alert'
 
 // function
 import Login from './login/login'
-import My from './my/my'
 import MyInfo from './my/myinfo'
 import MyReport from './my/myreport'
 import MyReportDetail from './my/myreportdetail'
@@ -111,7 +110,6 @@ import Result from './meeting/result'
 import Register from './login/register'
 import UpdatePassword from './login/updatepassword'
 import AgreeMent from './login/agreement'
-import PersonInfo from './login/personinfo'
 
 const middleWare = require('./libs/middleware')
 const FastClick = require('fastclick')
@@ -133,9 +131,6 @@ const router = new Router()
 router.map({
   '/': {
     component: Home
-  },
-  '/my': {
-    component: My
   },
   '/myinfo': {
     component: MyInfo
@@ -160,9 +155,6 @@ router.map({
   },
   '/agreement': {
     component: AgreeMent
-  },
-  '/personinfo': {
-    component: PersonInfo
   },
   '/check': {
     component: Check

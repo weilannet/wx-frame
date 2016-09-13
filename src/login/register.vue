@@ -33,7 +33,7 @@
   }
 </style>
 <script>
-  import { Toast, XInput, Group, XButton, Cell, Box, Icon } from '../components'
+  import { XInput, Group, XButton, Cell, Box, Icon } from '../components'
   export default {
     created () {
       document.title = '注册'
@@ -41,7 +41,6 @@
     ready () {
     },
     components: {
-      Toast,
       XInput,
       XButton,
       Group,

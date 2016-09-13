@@ -75,19 +75,20 @@
         }
         this.$http.post('/applogin', data).then(function (response) {
           var result = response.data && JSON.parse(response.data)
+          this.submitdisable = false
+          this.txtSubmit = '登录'
           if (result.msgcode) {
             localStorage['APP_SUCCESS'] = result.data._id
             this.$vux.alert.show({content: '登录成功！'})
             var pathFrom = me.$route.query.id
             me.$router.go(
               {
-                path: !pathFrom ? (result.data && result.data.realName ? '/myreport' : '/personinfo') : pathFrom,
+                path: !pathFrom ? (result.data && result.data.realName ? '/myreport' : '/myinfo') : pathFrom,
                 params: null
               }
             )
             return
           }
-          this.submitdisable = false
           this.$vux.alert.show({content: '用户名或密码错误！'})
         }, function () {
         })

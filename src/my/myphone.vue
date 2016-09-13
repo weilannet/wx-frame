@@ -17,8 +17,6 @@
       <x-button  :text="submittext"  :disabled="submitdisable" type="primary" @click="btnSubmit"></x-button>
     </box>
 
-
-    <toast :show.sync="showToast" :time="1000">修改成功</toast>
     <!--<other-component/>-->
   </div>
 </template>
@@ -29,11 +27,7 @@
 
 </style>
 <script>
-  import { Toast, XInput, Group, XButton, Cell, Box, Icon } from '../components'
-  import Router from 'vue-router'
-  import Vue from 'vue'
-  Vue.use(Router)
-  const router = new Router()
+  import { XInput, Group, XButton, Cell, Box, Icon } from '../components'
   export default {
     created () {
       document.title = '修改手机号'
@@ -41,7 +35,6 @@
     ready () {
     },
     components: {
-      Toast,
       XInput,
       XButton,
       Group,
@@ -71,19 +64,16 @@
         this.submittext = '正在提交'
         this.submitdisable = true
         var data = {
-          phone: this.txtmobile,
-          password: this.txtpwd
+          phone: this.txtmobile
         }
-        console.log(JSON.stringify(data))
-        this.showToast = true
-        setTimeout(function () {
-          router.go(
-            {
-              path: '/',
-              params: null
-            }
-          )
-        }, 1000)
+        this.$http.post('/updateInfo', data).then(function (response) {
+          console.log(response.data)
+          var result = response.data && JSON.parse(response.data)
+          this.submitdisable = false
+          this.submittext = '保存'
+          this.$vux.alert.show({content: result.msg})
+        }, function () {
+        })
       },
       finish (index) {
         if (this.interval) {
