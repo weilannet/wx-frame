@@ -3,18 +3,18 @@
     <!--<header-component/>-->
 
     <group title="">
-      <x-input title="手机号码" name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
+      <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
     </group>
     <group title="">
-      <x-input title="密码" type="text" placeholder="请输入密码" :value.sync="password" :min="6" ></x-input>
+      <x-input title="密码" type="text" placeholder="请输入密码" :value.sync="txtpwd" :min="6" ></x-input>
      </group>
 
       <box gap="30px 10px">
-        <a v-link="{ path: '/personinfo' }"><x-button  :text="submit001"  type="primary" @click="processButton001"></x-button></a>
+        <x-button :disabled="submitdisable"  :text="txtSubmit"  type="primary" @click="btnLogin"></x-button>
       </box>
 
       <box gap="10px 10px">
-        <a v-link="{ path: '/register' }"><x-button :text="submit002" plain type="primary" @click="processButton002"></x-button></a>
+        <a v-link="{ path: '/register' }"><x-button :text="txtRegister" plain type="primary" ></x-button></a>
       </box>
 
     <box gap="20px 10px" class="forgotpassword">
@@ -52,23 +52,47 @@
     },
     data () {
       return {
-        submit001: '登录',
-        disable001: false,
-        submit002: '注册成为认证医生',
-        disable002: false
+        txtSubmit: '登录',
+        submitdisable: false,
+        txtRegister: '注册成为认证医生',
+        txtmobile: '',
+        txtpwd: ''
       }
     },
     methods: {
       onChange (val) {
         console.log(val)
       },
-      processButton001 () {
-        this.submit001 = '正在提交'
-        this.disable001 = true
-      },
-      processButton002 () {
-        this.submit002 = '正在提交'
-        this.disable002 = true
+      btnLogin () {
+        this.txtSubmit = '正在提交'
+        this.submitdisable = true
+        var me = this
+        var data = {
+          phone: this.txtmobile,
+          password: this.txtpwd
+        }
+        this.$http.post('/applogin', data).then(function (response) {
+          console.log(response.data)
+          var result = response.data
+          if (result.msgcode) {
+            localStorage['APP_SUCCESS'] = result.data
+            this.$vux.alert.show({content: '登录成功！'})
+            if (me.$route.query.id) {
+              history.back(-1)
+              return
+            }
+            me.$router.go(
+              {
+                path: result.data && result.data.realName ? '/myreport' : '/personinfo',
+                params: null
+              }
+            )
+            return
+          }
+          this.submitdisable = false
+          this.$vux.alert.show({content: '用户名或密码错误！'})
+        }, function () {
+        })
       }
     }
   }

@@ -113,6 +113,7 @@ import UpdatePassword from './login/updatepassword'
 import AgreeMent from './login/agreement'
 import PersonInfo from './login/personinfo'
 
+const middleWare = require('./libs/middleware')
 const FastClick = require('fastclick')
 FastClick.attach(document.body)
 
@@ -450,7 +451,6 @@ let demoScrollTop = 0
 function saveDemoScrollTop () {
   demoScrollTop = window.scrollY
 }
-
 router.beforeEach(function (transition) {
   if (transition.to.fullPath !== '/demo') {
     window.removeEventListener('scroll', saveDemoScrollTop, false)
@@ -464,6 +464,12 @@ router.beforeEach(function (transition) {
         replace: true,
         path: transition.to.path.replace('/demo', ''),
         append: false
+      })
+    } else if (!/\/login|\/register|\/agreement/.test(transition.to.path) && !middleWare.validateLoin()) {
+      router.go({
+        path: '/login',
+        params: { id: 1 },
+        query: { id: 1 }
       })
     } else {
       transition.next()

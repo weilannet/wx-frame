@@ -112,7 +112,7 @@
         this.disableSubmit = true
         var me = this
         var data = {
-          realName: this.realName + '111',
+          realName: this.realName,
           age: this.age,
           sex: this.sex,
           phone: this.phone,
@@ -131,13 +131,14 @@
           })
         })
         Promise.all(imagesAjax).then(values => {
-          debugger
           console.log(values)
           data.imagesPath = values
+          data.imagesName = me.imageNames
           me.$http.post('/report', data).then(function (request) {
             if (request.status === 200) {
-              console.log(request.response)
+              console.log(request.data)
             } else {
+              me.$vux.alert.show({content: Error(request.statusText)})
             }
           })
         })
@@ -145,6 +146,7 @@
       closeClick (index) {
         this.images.splice(index, 1)
         this.imageNames.splice(index, 1)
+        this.currentCount = this.currentCount - 1
       },
       preImg (event) {
         if (!this.realName) {
@@ -170,8 +172,8 @@
           }
           console.log(img.size)
           console.log(img.type)
-          if (img.size > 1024 * 1024) {
-            me.$vux.alert.show({content: '图片大小不可超过1M'})
+          if (img.size > 1024 * 1024 * 3) {
+            me.$vux.alert.show({content: '图片大小不可超过3M'})
             return false
           }
           var reader = new FileReader()
