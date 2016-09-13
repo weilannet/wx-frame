@@ -465,11 +465,12 @@ router.beforeEach(function (transition) {
         path: transition.to.path.replace('/demo', ''),
         append: false
       })
-    } else if (!/\/login|\/register|\/agreement/.test(transition.to.path) && !middleWare.validateLoin()) {
+    } else if (!/\/login|\/updatepassword|\/register|\/agreement/.test(transition.to.path) && !middleWare.validateLoin()) {
+      var formPath = transition.to.path.toString()
       router.go({
         path: '/login',
-        params: { id: 1 },
-        query: { id: 1 }
+        params: { id: formPath },
+        query: { id: formPath }
       })
     } else {
       transition.next()

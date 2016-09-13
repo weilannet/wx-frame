@@ -3,20 +3,17 @@
     <!--<header-component/>-->
 
     <group title="">
-      <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number"
-               is-type="china-mobile"></x-input>
+      <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
     </group>
     <group title="">
 
       <x-input title="验证码" class="weui_vcode">
-        <x-button slot="right" type="primary" :disabled="codedisable" @click="codeClick"
-                  :text.sync="codevalue"></x-button>
+        <x-button slot="right" type="primary" :disabled="codedisable" @click="codeClick" :text.sync="codevalue"></x-button>
       </x-input>
 
     </group>
     <group title="两次输入需要保持一致">
-      <x-input title="设置密码" type="password" placeholder="" :value.sync="txtpwd" :min="6" :max="12"
-               @change="pwdChange"></x-input>
+      <x-input title="设置密码" type="password" placeholder="" :value.sync="txtpwd" :min="6" :max="12" @change="pwdChange"></x-input>
       <x-input title="确认密码" type="password" placeholder="" :value.sync="txtpwd2" :equal-with="password"></x-input>
     </group>
 
@@ -27,7 +24,6 @@
     <box gap="20px 10px" class="forgotpassword">
       <span>我已阅读并同意</span><a v-link="{ path: '/agreement' }">《同仁服务协议》</a>
     </box>
-    <toast :show.sync="showToast" :time="1000">注册成功,3s后跳转</toast>
     <!--<other-component/>-->
   </div>
 </template>
@@ -35,7 +31,6 @@
   .forgotpassword {
     text-align: center;
   }
-
 </style>
 <script>
   import { Toast, XInput, Group, XButton, Cell, Box, Icon } from '../components'
@@ -64,8 +59,7 @@
         codedisable: false,
         txtmobile: '',
         txtpwd: '',
-        txtpwd2: '',
-        showToast: false
+        txtpwd2: ''
       }
     },
     methods: {
@@ -80,14 +74,14 @@
           phone: this.txtmobile,
           password: this.txtpwd
         }
-        console.log(JSON.stringify(data))
 
         this.$http.post('/register', data).then(function (response) {
-          debugger
           console.log(response.data)
-          var result = response.data
+          var result = response.data && JSON.parse(response.data)
+          this.submitdisable = false
+          this.submittext = '注册'
+          this.$vux.alert.show({content: result.msg})
           if (result.msgcode) {
-            this.showToast = true
             setTimeout(function () {
               me.$router.go(
                 {
@@ -95,9 +89,7 @@
                   params: null
                 }
               )
-            }, 3000)
-          } else {
-            this.$vux.alert.show({content: response.statusText})
+            }, 500)
           }
         }, function () {
         })
@@ -145,7 +137,7 @@
     vertical-align: middle;
     display: inline-block;
   }
-
+  
   .weui_vcode .weui_btn {
     width: auto;
   }

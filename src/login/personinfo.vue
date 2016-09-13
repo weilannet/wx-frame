@@ -34,7 +34,6 @@
   export default {
     created () {
       document.title = '身份认证'
-      Object.assign(this.model, this.$route.query)
       this.lstdepart = [['眼底科', '青光眼科', '眼外伤科']]
       this.lstprofessor = [['主治医师', '主任医师', '副主任医师']]
     },
@@ -61,7 +60,7 @@
           deparment: 0,
           position: 0,
           phone: '',
-          province: ''
+          address: ''
         },
         addressData: AddressChinaData,
         titlecity: '城市',

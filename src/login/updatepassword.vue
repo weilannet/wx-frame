@@ -21,8 +21,6 @@
       <x-button  :text="submittext"  :disabled="submitdisable" type="primary" @click="btnSubmit"></x-button>
     </box>
 
-
-    <toast :show.sync="showToast" :time="1000">修改成功</toast>
     <!--<other-component/>-->
   </div>
 </template>
@@ -34,10 +32,6 @@
 </style>
 <script>
   import { Toast, XInput, Group, XButton, Cell, Box, Icon } from '../components'
-  import Router from 'vue-router'
-  import Vue from 'vue'
-  Vue.use(Router)
-  const router = new Router()
   export default {
     created () {
       document.title = '忘记密码'
@@ -63,8 +57,7 @@
         codedisable: false,
         txtmobile: '',
         txtpwd: '',
-        txtpwd2: '',
-        showToast: false
+        txtpwd2: ''
       }
     },
     methods: {
@@ -72,22 +65,32 @@
         this.codevalue = val + '秒后再获取'
       },
       btnSubmit () {
+        var me = this
         this.submittext = '正在提交'
         this.submitdisable = true
         var data = {
           phone: this.txtmobile,
           password: this.txtpwd
         }
-        console.log(JSON.stringify(data))
-        this.showToast = true
-        setTimeout(function () {
-          router.go(
-            {
-              path: '/login',
-              params: null
-            }
-          )
-        }, 1000)
+
+        this.$http.post('/updatePassword', data).then(function (response) {
+          console.log(response.data)
+          var result = response.data && JSON.parse(response.data)
+          this.submitdisable = false
+          this.submittext = '保存'
+          this.$vux.alert.show({content: result.msg})
+          if (result.msgcode) {
+            setTimeout(function () {
+              me.$router.go(
+                {
+                  path: '/login',
+                  params: null
+                }
+              )
+            }, 500)
+          }
+        }, function () {
+        })
       },
       finish (index) {
         if (this.interval) {
@@ -102,13 +105,24 @@
         this.txtpwd2 = ''
       },
       codeClick () {
+        if (!this.txtmobile) {
+          this.$vux.alert.show({content: '请先填写手机号码！'})
+          return false
+        }
         this.codedisable = true
-        let _this = this
+        let me = this
+        var data = {
+          mobile: this.txtmobile
+        }
+        this.$http.post('/getSMSCode', data).then(function (result) {
+          console.log(result.data)
+        }, function () {
+        })
         this.interval = setInterval(function () {
-          if (_this.time > 0) {
-            _this.change(_this.time--)
+          if (me.time > 0) {
+            me.change(me.time--)
           } else {
-            _this.finish()
+            me.finish()
           }
         }, 1000)
       }
