@@ -12,8 +12,8 @@
 
       <x-input title="医院" name="username" :value.sync="model.hospital" placeholder="请务必填写正确的医院名称" is-type="china-name"></x-input>
 
-      <popup-picker :title="titledepart" :data="lstdepart" :value.sync="txtdepart" @on-show="onShow" @on-hide="onHide" @on-change="onChangeDepart"></popup-picker>
-      <popup-picker :title="titleprofessor" :data="lstprofessor" :value.sync="txtprofessor" @on-show="onShow" @on-hide="onHide" @on-change="onChangeProfessor"></popup-picker>
+      <popup-picker :title="titledepart" :data="lstdepart" :value.sync="txtdepart" @on-show="onShow" @on-hide="onHide"></popup-picker>
+      <popup-picker :title="titleprofessor" :data="lstprofessor" :value.sync="txtprofessor" @on-show="onShow" @on-hide="onHide"></popup-picker>
 
     </group>
 
@@ -37,11 +37,6 @@
     created () {
       var me = this
       document.title = '身份认证'
-      this.lstdepart = [['眼底科', '青光眼科', '眼外伤科']]
-      this.lstprofessor = [['主治医师', '主任医师', '副主任医师']]
-      this.txtdepart = ['眼底科']
-      this.txtprofessor = ['主治医师']
-      this.txtaddress = ['北京市', '北京市市辖区', '朝阳区']
       ajaxHelper.sendAjax(
         [ajaxHelper.createAjax('/getUserInfo'),
         ajaxHelper.createAjax('/getCateList', {category: 'depart'}),
@@ -50,11 +45,22 @@
           userData = userData && JSON.parse(userData)
           departData = departData && JSON.parse(departData)
           professorData = professorData && JSON.parse(professorData)
-          debugger
+ 
           Object.assign(me.model, userData.data)
-          console.log(userData)
-          console.log(departData)
-          console.log(professorData)
+          me.lstdepart = [['眼底科1', '青光眼科1', '眼外伤科1']]
+          me.lstdepart[0].unshift('请选择科室')
+          me.lstprofessor = [['主治医师1', '主任医师1', '副主任医师1']]
+          me.lstprofessor[0].unshift('请选择职称')
+          me.txtaddress = [
+            !me.model.province ? '110000' : me.model.province,
+            !me.model.city ? '110100' : me.model.city,
+            !me.model.area ? '110101' : me.model.area
+          ]
+          me.txtdepart = [!me.model.department ? '请选择科室' : me.lstdepart[0][me.model.department]]
+          me.txtprofessor = [!me.model.position ? '请选择职称' : me.lstprofessor[0][me.model.position]]
+          // console.log(userData)
+          // console.log(departData)
+          // console.log(professorData)
         }
       )
     },
@@ -78,31 +84,27 @@
           id: '',
           realName: '',
           hospital: '',
-          deparment: 0,
+          department: 0,
           position: 0,
           phone: '',
-          address: ''
+          province: '',
+          city: '',
+          area: ''
         },
         addressData: AddressChinaData,
         titlecity: '城市',
         titledepart: '科室',
         titleprofessor: '职称',
-        txtsubmit: '完成',
+        txtsubmit: '保存',
         submitdisable: false,
-        txtdepart: null,
-        txtprofessor: null,
-        txtaddress: null,
-        lstdepart: null,
-        lstprofessor: null
+        txtdepart: ['眼底科'],
+        txtprofessor: ['主治医师'],
+        txtaddress: ['北京市', '北京市市辖区', '朝阳区'],
+        lstdepart: [['眼底科', '青光眼科', '眼外伤科']],
+        lstprofessor: [['主治医师', '主任医师', '副主任医师']]
       }
     },
     methods: {
-      onChangeDepart (val) {
-        console.log(val)
-      },
-      onChangeProfessor (val) {
-
-      },
       onShow () {
         console.log('on show')
       },
@@ -110,12 +112,33 @@
         console.log('on hide', type)
       },
       btnSubmit () {
+        var me = this
         this.txtsubmit = '正在提交'
         this.submitdisable = true
-        console.log(this.txtaddress)
-
-        this.txtsubmit = '完成'
-        this.submitdisable = false
+        // model
+        this.model.department = this.lstdepart[0].indexOf(this.txtdepart[0])
+        this.model.position = this.lstprofessor[0].indexOf(this.txtprofessor[0])
+        this.model.province = this.txtaddress[0]
+        this.model.city = this.txtaddress[1]
+        this.model.area = this.txtaddress[2]
+        this.$http.post('/updateInfo', this.model).then(function (response) {
+          console.log(response.data)
+          var result = response.data && JSON.parse(response.data)
+          this.submitdisable = false
+          this.txtsubmit = '保存'
+          this.$vux.alert.show({content: result.msg})
+          if (result.msgcode) {
+            setTimeout(function () {
+              me.$router.go(
+                {
+                  path: '/myreport',
+                  params: null
+                }
+              )
+            }, 500)
+          }
+        }, function () {
+        })
       }
     }
   }

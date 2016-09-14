@@ -40,7 +40,7 @@
       </cell>
     </group>
     <group>
-      <cell title="审核病历" link="/check" value="">
+      <cell title="审核病历" link="/check?_id=57d91395ece91819f487a72c" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
     </group>

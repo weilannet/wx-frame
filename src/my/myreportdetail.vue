@@ -5,9 +5,10 @@
 
       <div class="success">
         <div  v-show="model.state==0"><icon type="info" class="icon_big"></icon>待处理</div>
-        <div  v-show="model.state==1"><icon type="info"></icon>接收</div>
-        <div  v-show="model.state==2"><icon type="warn"></icon>拒绝</div>
+        <div  v-show="model.state==1"><icon type="info" class="icon_big"></icon>接收</div>
+        <div  v-show="model.state==2"><icon type="warn" class="icon_big"></icon>拒绝</div>
         <div  v-show="model.state==3"><icon type="success" class="icon_big"></icon>患者确认就诊</div>
+        <div  v-show="model.state==4"><icon type="info" class="icon_big"></icon>患者爽约</div>
       </div>
 
       <div class="arrange">
@@ -25,8 +26,8 @@
         <div class="myreport-title">基本诊断：</div>
         <div class="myreport-content">
           {{ model.checkInfo }}
-          <div  v-for="item in model.images" track-by="$index">
-          <img  src="{{ item }}"  />
+          <div  v-for="item in model.imagesPath" track-by="$index">
+              <img :src="item" alt="" />
           </div>
         </div>
 
@@ -47,6 +48,7 @@
       Object.assign(this.model, this.$route.query)
       switch (parseInt(this.model.state)) {
         case 0:
+        case 4:
           this.template = ''
           break
         case 1:

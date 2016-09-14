@@ -1,19 +1,16 @@
 <template>
   <div>
-    <!--<header-component/>-->
-
-    <!--<cell title="接收新消息通知" value="已启用"></cell>-->
-
     <group title="">
-    <x-input title="姓名" :value.sync="realName" name="realName" placeholder="请填写患者姓名" is-type="china-name"></x-input>
-    <popup-picker :title="titleSex" :data="lstSex" :value.sync="sex"  @on-show="onShow" @on-hide="onHide" @on-change="onChange"></popup-picker>
-    <x-input title="年龄" :value.sync="age" type="text"  name="age" placeholder="请填写患者年龄"  :min="1" :max="100"></x-input>
-    <x-input title="手机号码" :value.sync="phone" name="phone" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile"></x-input>
-  </group>
+      <x-input title="姓名" :value.sync="model.realName" placeholder="请填写患者姓名" is-type="china-name"></x-input>
+      <popup-picker :title="titleSex" :data="lstSex" :value.sync="txtSex" @on-show="onShow" @on-hide="onHide" @on-change="onChange"></popup-picker>
+      <x-input title="年龄" :value.sync="model.age" type="text" placeholder="请填写患者年龄" :min="1" :max="100"></x-input>
+      <x-input title="手机号码" :value.sync="model.phone" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile"></x-input>
+    </group>
 
     <group>
       <cell title="基本诊断" value=""></cell>
-      <x-textarea :max="200"  name="checkInfo"  :value.sync="checkInfo"  placeholder="请输入诊断信息..." :show-counter="false" :height="200" :rows="8" :cols="30"></x-textarea>
+      <x-textarea :max="200" :value.sync="model.checkInfo" placeholder="请输入诊断信息..." :show-counter="false" :height="200" :rows="8"
+        :cols="30"></x-textarea>
     </group>
 
     <div class="weui_cells weui_cells_form">
@@ -25,20 +22,13 @@
               <div class="weui_cell_ft">{{currentCount}}/{{totalCount}}</div>
             </div>
             <div class="weui_uploader_bd">
-              <ul class="weui_uploader_files" v-for="item in images" track-by="$index" >
-                <li class="weui_uploader_file" :style="'background-image:url('+item+')'"><icon type="clear" @click="closeClick($index)" class="icon_big"></icon></li>
-
-                <!--<li class="weui_uploader_file weui_uploader_status" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)">-->
-                  <!--<div class="weui_uploader_status_content">-->
-                    <!--<i class="weui_icon_warn"></i>-->
-                  <!--</div>-->
-                <!--</li>-->
-                <!--<li class="weui_uploader_file weui_uploader_status" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)">-->
-                  <!--<div class="weui_uploader_status_content">50%</div>-->
-                <!--</li>-->
+              <ul class="weui_uploader_files" v-for="item in images" track-by="$index">
+                <li class="weui_uploader_file" :style="'background-image:url('+item+')'">
+                  <icon type="clear" @click="closeClick($index)" class="icon_big"></icon>
+                </li>
               </ul>
               <div class="weui_uploader_input_wrp">
-                <input class="weui_uploader_input" ref="imgUp" type="file" accept="image/*" multiple @change="preImg"  />
+                <input class="weui_uploader_input" ref="imgUp" type="file" accept="image/*" multiple @change="preImg" />
               </div>
             </div>
           </div>
@@ -46,7 +36,7 @@
       </div>
     </div>
     <box gap="30px 10px">
-        <x-button  :text="titleSubmit" :disabled="disableSubmit" type="primary" @click="btnSubmit"></x-button>
+      <x-button :text="titleSubmit" :disabled="disableSubmit" type="primary" @click="btnSubmit"></x-button>
     </box>
     <toast :show.sync="showToast" :time="1000">上报成功</toast>
     <!--<other-component/>-->
@@ -56,7 +46,6 @@
 <style lang="less">
   @import '../styles/1px.less';
   @import '../styles/weui/weui.min.css';
-
 </style>
 <script>
   import { Toast, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
@@ -77,14 +66,19 @@
     },
     data () {
       return {
-        realName: '',
-        age: '',
-        sex: ['女'],
-        phone: '',
-        checkInfo: '',
+        model: {
+          realName: '',
+          age: '',
+          sex: 0,
+          phone: '',
+          checkInfo: '',
+          imagesPath: '',
+          imagesName: null
+        },
         images: [],
         imageNames: [],
         titleSex: '性别',
+        txtSex: ['男'],
         lstSex: [['男', '女']],
         showToast: false,
         titleSubmit: '完成',
@@ -111,16 +105,9 @@
         this.titleSubmit = '正在提交'
         this.disableSubmit = true
         var me = this
-        var data = {
-          realName: this.realName,
-          age: this.age,
-          sex: this.sex,
-          phone: this.phone,
-          checkInfo: this.checkInfo
-        }
         var imagesAjax = this.images.map(function (value, index) {
           return new Promise(function (resolve, reject) {
-            me.$http.post('/imgUpload', {pathName: me.realName, imgData: value, imgName: me.imageNames[index]}).then(function (request) {
+            me.$http.post('/imgUpload', {pathName: me.model.realName, imgData: value, imgName: me.imageNames[index]}).then(function (request) {
               if (request.status === 200) {
                 console.log(request.data.result)
                 resolve(request.data)
@@ -132,13 +119,23 @@
         })
         Promise.all(imagesAjax).then(values => {
           console.log(values)
-          data.imagesPath = values
-          data.imagesName = me.imageNames
-          me.$http.post('/report', data).then(function (request) {
-            if (request.status === 200) {
-              console.log(request.data)
-            } else {
-              me.$vux.alert.show({content: Error(request.statusText)})
+          me.model.sex = me.lstSex[0].indexOf(me.txtSex[0])
+          me.model.imagesPath = values
+          me.model.imagesName = me.imageNames
+          me.$http.post('/report', me.model).then(function (response) {
+            var result = response.data && JSON.parse(response.data)
+            this.disableSubmit = false
+            this.titleSubmit = '完成'
+            this.$vux.alert.show({content: result.msg})
+            if (result.msgcode) {
+              setTimeout(function () {
+                me.$router.go(
+                  {
+                    path: '/myreport',
+                    params: null
+                  }
+                )
+              }, 500)
             }
           })
         })
@@ -149,7 +146,7 @@
         this.currentCount = this.currentCount - 1
       },
       preImg (event) {
-        if (!this.realName) {
+        if (!this.model.realName) {
           this.$vux.alert.show({content: '请先填写病人名称！'})
           return false
         }
