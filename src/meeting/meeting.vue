@@ -1,30 +1,24 @@
 <template>
-
+  <div>
     <!--<header-component/>-->
    <div class="meeting">
 
      <div class="meeting-title">
-       大忙人，你的早餐上黑名单了吗？
+       {{model.title}}
      </div>
      <div class="meeting-date">
-       2016-08-13
+       {{model.publishTime}}
      </div>
 
-     <div class="meeting-content">1.需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理……
-       <br/>2.需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理……
-       <br/>3.需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理……
-       <br/>4.需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理，需要治疗，病情进一步处理……
-       <img   src="http://udongman.oss.aliyuncs.com/image/2014/1022/20141022104422934.jpg"  >
-       <img   src="http://udongman.oss.aliyuncs.com/image/2014/1022/20141022104422934.jpg" >
-       <img   src="http://udongman.oss.aliyuncs.com/image/2014/1022/20141022104422934.jpg" >
-
+     <div class="meeting-content">
+       {{model.content}}
      </div>
 
    </div>
   <box  class="meeting-sign">
-    <a v-link="{ path: '/meetingconfirm' }"><x-button  text="报名参加"  type="primary" @click="btnClick"></x-button></a>
+    <x-button :disabled="submitdisable" :text="txtmeeting"  type="primary" @click="btnClick"></x-button>
   </box>
-
+</div>
 
 </template>
 <script>
@@ -32,6 +26,24 @@
   export default {
     created () {
       document.title = '会议报名'
+      Object.assign(this.model, this.$route.query)
+      this.$http.post('/getMeetingInfo', {_id: this.model._id}).then(function (response) {
+        var result = response.data && JSON.parse(response.data)
+        if (result.msgcode) {
+          Object.assign(this.model, result.data)
+          this.submitdisable = false
+          if (this.model.code) {
+            this.issign = true
+            this.txtmeeting = '已报名，点击查看详情'
+            return
+          }
+          this.issign = false
+        } else {
+          this.$vux.alert.show({content: result.msg})
+          this.txtmeeting = '不可报名'
+          this.submitdisable = true
+        }
+      })
     },
     ready () {
     },
@@ -41,11 +53,38 @@
     },
     data () {
       return {
+        model: {
+          _id: '',
+          title: '',
+          publishTime: '',
+          content: '',
+          state: 0,
+          code: '',
+          codeUrl: ''
+        },
+        issign: false,
+        submitdisable: false,
+        txtmeeting: '报名参加'
       }
     },
     methods: {
       btnClick () {
-        console.log('click')
+        if (!this.issign) {
+          this.$router.go(
+            {
+              path: '/meetingconfirm',
+              params: { meetingId: this.model._id },
+              query: { meetingId: this.model._id }
+            })
+          return
+        }
+        // meetingconfirm
+        this.$router.go(
+          {
+            path: '/result',
+            params: { meetingId: this.model._id, code: this.model.code, title: this.model.title },
+            query: { meetingId: this.model._id, code: this.model.code, title: this.model.title }
+          })
       }
     }
   }

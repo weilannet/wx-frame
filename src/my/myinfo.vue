@@ -112,7 +112,6 @@
         console.log('on hide', type)
       },
       btnSubmit () {
-        var me = this
         this.txtsubmit = '正在提交'
         this.submitdisable = true
         // model
@@ -127,16 +126,6 @@
           this.submitdisable = false
           this.txtsubmit = '保存'
           this.$vux.alert.show({content: result.msg})
-          if (result.msgcode) {
-            setTimeout(function () {
-              me.$router.go(
-                {
-                  path: '/myreport',
-                  params: null
-                }
-              )
-            }, 500)
-          }
         }, function () {
         })
       }

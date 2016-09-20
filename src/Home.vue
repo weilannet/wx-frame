@@ -35,7 +35,7 @@
       </cell>
     </group>
     <group>
-      <cell title="会议报名" link="/meeting" value="">
+      <cell title="会议报名" link="/meeting?_id=57e0f4e989a4dd03940f1185" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
     </group>

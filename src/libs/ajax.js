@@ -11,7 +11,6 @@ ajaxHelper.createAjax = function (path, params) {
     var me = new Vue()
     me.$http.post(path, params).then(function (request) {
       if (request.status === 200) {
-        console.log(request.data.result)
         resolve(request.data)
       } else {
         reject(Error(request.statusText))
