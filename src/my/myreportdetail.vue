@@ -17,7 +17,6 @@
         <span>{{template===''?'无':template}}</span>
       </div>
 
-
     </div>
 
     <group class="myreport-item">
@@ -30,7 +29,6 @@
               <img :src="item" alt="" />
           </div>
         </div>
-
 
     <!--<other-component/>-->
   </div>
@@ -46,19 +44,19 @@
     created () {
       document.title = '病历详情'
       Object.assign(this.model, this.$route.query)
-      switch (parseInt(this.model.state)) {
+      this.model.state = parseInt(this.model.state)
+      console.log(this.model)
+      switch (this.model.state) {
         case 0:
-        case 4:
-          this.template = ''
+          this.template = '该病人信息还未处理'
           break
         case 1:
+        case 3:
+        case 4:
           this.template = `已安排${this.model.realName}患者于${this.model.bookTime}在${this.model.catetoryRoom}诊室就诊！`
           break
         case 2:
-          this.template = this.model.refuseContent && this.model.refuseContent || ''
-          break
-        case 3:
-          this.template = `已安排${this.model.realName}患者于${this.model.bookTime}在${this.model.catetoryRoom}诊室就诊！`
+          this.template = this.model.checkInfo && this.model.checkInfo || ''
           break
       }
     },
@@ -82,8 +80,7 @@
           images: [],
           phone: '',
           bookTime: '',
-          catetoryRoom: '',
-          refuseContent: ''
+          catetoryRoom: ''
         }
       }
     },
