@@ -3,10 +3,10 @@
     <!--<header-component/>-->
 
     <group title="">
-      <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
+      <x-input title="手机号码" name="mobile" required :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-ref:inputmobile></x-input>
     </group>
     <group title="">
-      <x-input title="密码" type="text" placeholder="请输入密码" :value.sync="txtpwd" :min="6"></x-input>
+      <x-input title="密码" type="password" placeholder="请输入密码" :value.sync="txtpwd" :min="6" v-ref:inputpassword></x-input>
     </group>
 
     <box gap="30px 10px">
@@ -22,7 +22,6 @@
     <box gap="20px 10px" class="forgotpassword">
       <a v-link="{ path: '/updatepassword' }">忘记密码</a>
     </box>
-
     <!--<other-component/>-->
   </div>
 </template>
@@ -37,6 +36,7 @@
 </style>
 <script>
   import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box } from '../components'
+  import validlib from '../libs/validate'
   export default {
     created () {
       document.title = '登录'
@@ -66,6 +66,9 @@
         console.log(val)
       },
       btnLogin () {
+        if (!validlib(this)) {
+          return
+        }
         this.txtSubmit = '正在提交'
         this.submitdisable = true
         var me = this
@@ -90,7 +93,6 @@
             return
           }
           this.$vux.alert.show({content: '用户名或密码错误！'})
-        }, function () {
         })
       }
     }

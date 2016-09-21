@@ -6,11 +6,11 @@
     <div><icon type="info"></icon>以下信息仅认证使用，不会公开</div>
     <group title="">
       <cell title="手机号码" :value.sync="model.phone"></cell>
-      <x-input title="姓名" name="username" :value.sync="model.realName" placeholder="请输入姓名" is-type="china-name"></x-input>
+      <x-input title="姓名" name="username" :value.sync="model.realName" placeholder="请输入姓名" is-type="china-name" required v-ref:inputname></x-input>
 
       <address :title="titlecity" :value.sync="txtaddress" raw-value :list="addressData"></address>
 
-      <x-input title="医院" name="username" :value.sync="model.hospital" placeholder="请务必填写正确的医院名称" is-type="china-name"></x-input>
+      <x-input title="医院" name="username" :value.sync="model.hospital" placeholder="请务必填写正确的医院名称" is-type="china-name" required v-ref:inputhospital></x-input>
 
       <popup-picker :title="titledepart" :data="lstdepart" :value.sync="txtdepart" @on-show="onShow" @on-hide="onHide"></popup-picker>
       <popup-picker :title="titleprofessor" :data="lstprofessor" :value.sync="txtprofessor" @on-show="onShow" @on-hide="onHide"></popup-picker>
@@ -33,6 +33,7 @@
 <script>
   import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Address, AddressChinaData } from '../components'
   var ajaxHelper = require('../libs/ajax')
+  import validlib from '../libs/validate'
   export default {
     created () {
       var me = this
@@ -112,6 +113,17 @@
         console.log('on hide', type)
       },
       btnSubmit () {
+        if (!validlib(this)) {
+          return
+        }
+        if (this.txtdepart[0] === '请选择科室') {
+          this.$vux.toast.show({ text: '请选择科室!', type: 'text', time: 1000, width: '20em' })
+          return
+        }
+        if (this.txtprofessor[0] === '请选择职称') {
+          this.$vux.toast.show({ text: '请选择职称！', type: 'text', time: 1000, width: '20em' })
+          return
+        }
         this.txtsubmit = '正在提交'
         this.submitdisable = true
         // model

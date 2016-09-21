@@ -3,18 +3,18 @@
     <!--<header-component/>-->
 
     <group title="">
-      <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
+      <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" @change="phoneChange"  required v-ref:inputmobile></x-input>
     </group>
     <group title="">
 
-      <x-input title="验证码" class="weui_vcode" >
+      <x-input title="验证码" class="weui_vcode" required v-ref:inputcode :value.sync="txtcode" >
         <x-button slot="right" type="primary" :disabled="codedisable" @click="codeClick" :text="codevalue"></x-button>
       </x-input>
 
     </group>
     <group title="两次输入需要保持一致">
-      <x-input title="修改密码" type="password" placeholder="" :value.sync="txtpwd" :min="6" :max="12" @change="pwdChange"></x-input>
-      <x-input title="确认密码" type="password" placeholder=""  :value.sync="txtpwd2" :equal-with="password"></x-input>
+      <x-input title="修改密码" type="password" placeholder="" :value.sync="txtpwd" :equal-with="txtpwd2" :min="6" :max="12" @change="pwdChange" required v-ref:inputpwd></x-input>
+      <x-input title="确认密码" type="password" placeholder=""  :value.sync="txtpwd2" required v-ref:inputpwdagain></x-input>
     </group>
 
     <box gap="30px 10px">
@@ -32,6 +32,7 @@
 </style>
 <script>
   import { XInput, Group, XButton, Cell, Box, Icon } from '../components'
+  import validlib from '../libs/validate'
   export default {
     created () {
       document.title = '忘记密码'
@@ -56,7 +57,9 @@
         codedisable: false,
         txtmobile: '',
         txtpwd: '',
-        txtpwd2: ''
+        txtpwd2: '',
+        txtcode: '',
+        txtcode2: ''
       }
     },
     methods: {
@@ -64,6 +67,13 @@
         this.codevalue = val + '秒后再获取'
       },
       btnSubmit () {
+        if (!validlib(this)) {
+          return
+        }
+        if (parseInt(this.txtcode) !== parseInt(this.txtcode2)) {
+          this.$vux.toast.show({text: '验证码输入有误！', type: 'text', time: 1000, width: '20em'})
+          return
+        }
         var me = this
         this.submittext = '正在提交'
         this.submitdisable = true
@@ -77,18 +87,19 @@
           var result = response.data && JSON.parse(response.data)
           this.submitdisable = false
           this.submittext = '保存'
-          this.$vux.alert.show({content: result.msg})
-          if (result.msgcode) {
-            setTimeout(function () {
-              me.$router.go(
-                {
-                  path: '/login',
-                  params: null
-                }
-              )
-            }, 500)
+          if (!result.msgcode) {
+            this.$vux.alert.show({content: result.msg})
+            return
           }
-        }, function () {
+          this.$vux.toast.show({text: '修改成功！', type: 'text', time: 500, width: '20em'})
+          setTimeout(function () {
+            me.$router.go(
+              {
+                path: '/login',
+                params: null
+              }
+            )
+          }, 500)
         })
       },
       finish (index) {
@@ -103,9 +114,12 @@
         console.log(val)
         this.txtpwd2 = ''
       },
+      phoneChange (val) {
+        this.txtcode = ''
+      },
       codeClick () {
-        if (!this.txtmobile) {
-          this.$vux.alert.show({content: '请先填写手机号码！'})
+        if (!this.$refs.inputmobile.valid) {
+          this.$vux.toast.show({ text: '请正确填写手机号码！', type: 'text', time: 1000, width: '20em' })
           return false
         }
         this.codedisable = true
@@ -113,9 +127,13 @@
         var data = {
           mobile: this.txtmobile
         }
-        this.$http.post('/getSMSCode', data).then(function (result) {
-          console.log(result.data)
-        }, function () {
+        this.$http.post('/getSMSCode', data).then(function (response) {
+          var result = response.data && JSON.parse(response.data)
+          if (!result.msgcode) {
+            this.$vux.alert.show({content: result.msg})
+            return
+          }
+          this.txtcode2 = result.data
         })
         this.interval = setInterval(function () {
           if (me.time > 0) {
