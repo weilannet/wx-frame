@@ -10,7 +10,7 @@
     </div>
       </box>
     <box gap="50px 10px">
-      <a v-link="{ path: '/' }"><x-button  :text="submit001"  type="primary" @click="processButton001">确定</x-button></a>
+      <a v-link="{ path: '/' }"><x-button  :text="submit001"  type="primary" >确定</x-button></a>
     </box>
 
     <!--<other-component/>-->

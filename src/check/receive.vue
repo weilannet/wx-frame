@@ -34,7 +34,7 @@
           departData = departData && JSON.parse(departData)
           roomData = roomData && JSON.parse(roomData)
           me.lstdepart = [['眼底组1', '青光眼组1', '眼外伤组1']]
-          me.lstdepart[0].unshift('请选择级别')
+          me.lstdepart[0].unshift('请选择组别')
           me.lstrooms = [['2201', '2202', '2203', '2204', '2205', '2206']]
           me.lstrooms[0].unshift('请选择诊室')
         }
@@ -85,7 +85,19 @@
       },
       btnSubmit () {
         if (!this.model._id) {
-          this.$vux.alert.show({content: '此病人不存在或已被审核！'})
+          this.$vux.toast.show({text: '此病人不存在或已被审核！', type: 'text', time: 1000, width: '20em'})
+          return
+        }
+        if (!this.lstdepart[0].indexOf(this.txtdepart[0])) {
+          this.$vux.toast.show({text: '请选择组别！', type: 'text', time: 1000, width: '20em'})
+          return
+        }
+        if (!this.lstrooms[0].indexOf(this.txtroom[0])) {
+          this.$vux.toast.show({text: '请选择诊室！', type: 'text', time: 1000, width: '20em'})
+          return
+        }
+        if (!this.txtboodTime) {
+          this.$vux.toast.show({text: '请选择日期！', type: 'text', time: 1000, width: '20em'})
           return
         }
         this.txtSubmit = '正在提交'
@@ -93,6 +105,7 @@
         var me = this
         this.model.categoryEyes = this.lstdepart[0].indexOf(this.txtdepart[0])
         this.model.categoryRoom = this.lstrooms[0].indexOf(this.txtroom[0])
+        this.model.categoryRoomText = this.txtroom[0]
         this.model.bookTime = this.txtboodTime
         this.model.state = 1
         this.$http.post('/updatePatientInfo', this.model).then(function (response) {
@@ -100,7 +113,7 @@
           var result = response.data && JSON.parse(response.data)
           this.submitdisable = false
           this.txtsubmit = '确定'
-          this.$vux.alert.show({content: result.msg})
+          this.$vux.toast.show({text: result.msg, type: 'text', time: 1000, width: '20em'})
           if (result.msgcode) {
             setTimeout(function () {
               me.$router.go(

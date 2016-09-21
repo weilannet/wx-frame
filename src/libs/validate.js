@@ -1,6 +1,9 @@
 export default function (_object) {
   var me = _object
   for (var each in me.$refs) {
+    if (!me.$refs[each].validate) {
+      continue
+    }
     me.$refs[each].validate()
     console.log(me.$refs[each].errors)
     for (var item in me.$refs[each].errors) {

@@ -49,7 +49,11 @@
     methods: {
       btnSubmit () {
         if (!this.model._id) {
-          this.$vux.alert.show({content: '此病人不存在或已被审核！'})
+          this.$vux.toast.show({text: '此病人不存在或已被审核！', type: 'text', time: 1000, width: '20em'})
+          return
+        }
+        if (!this.model.checkInfo) {
+          this.$vux.toast.show({text: '请输入拒绝理由！', type: 'text', time: 1000, width: '20em'})
           return
         }
         this.txtSubmit = '正在提交'

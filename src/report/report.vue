@@ -1,16 +1,16 @@
 <template>
   <div>
     <group title="">
-      <x-input title="姓名" :value.sync="model.realName" placeholder="请填写患者姓名" is-type="china-name"></x-input>
+      <x-input title="姓名" :value.sync="model.realName" placeholder="请填写患者姓名" is-type="china-name" required v-ref:inputname></x-input>
       <popup-picker :title="titleSex" :data="lstSex" :value.sync="txtSex" @on-show="onShow" @on-hide="onHide" @on-change="onChange"></popup-picker>
-      <x-input title="年龄" :value.sync="model.age" type="text" placeholder="请填写患者年龄" :min="1" :max="100"></x-input>
-      <x-input title="手机号码" :value.sync="model.phone" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile"></x-input>
+      <x-input title="年龄" :value.sync="model.age" type="text" placeholder="请填写患者年龄" :min="1" :max="100" required v-ref:inputage></x-input>
+      <x-input title="手机号码" :value.sync="model.phone" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile" required v-ref:inputmobile></x-input>
     </group>
 
     <group>
       <cell title="基本诊断" value=""></cell>
       <x-textarea :max="200" :value.sync="model.checkInfo" placeholder="请输入诊断信息..." :show-counter="false" :height="200" :rows="8"
-        :cols="30"></x-textarea>
+        :cols="30" required v-ref:inputcontent></x-textarea>
     </group>
 
     <div class="weui_cells weui_cells_form">
@@ -49,6 +49,7 @@
 </style>
 <script>
   import { Toast, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
+  import validlib from '../libs/validate'
   export default {
     ready () {
     },
@@ -102,6 +103,13 @@
         console.log('on hide', type)
       },
       btnSubmit () {
+        if (!validlib(this)) {
+          return
+        }
+        if (!this.model.checkInfo) {
+          this.$vux.toast.show({text: '请输入诊断信息！', type: 'text', time: 1000, width: '20em'})
+          return
+        }
         this.titleSubmit = '正在提交'
         this.disableSubmit = true
         var me = this
