@@ -17,7 +17,7 @@ export default {
     },
     size: {
       type: Number,
-      default: 80
+      default: 100
     },
     level: {
       type: String,

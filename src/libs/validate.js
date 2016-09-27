@@ -5,7 +5,6 @@ export default function (_object) {
       continue
     }
     me.$refs[each].validate()
-    console.log(me.$refs[each].errors)
     for (var item in me.$refs[each].errors) {
       if (item) {
         var errorText = me.$refs[each].title + me.$refs[each].errors[item]

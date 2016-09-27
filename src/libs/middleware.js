@@ -1,21 +1,24 @@
 /**
  * Created by gaoxin on 2016/9/11.
  */
-var middleware = {}
-middleware.appLogin = function (me) {
-  var uid = localStorage['APP_SUCCESS']
-  me.$http.post('/applogin', {uid}).then(function (response) {
-    console.log(response.data)
-    var result = response.data
-    return result
-  })
-}
+var Vue = require('vue')
+var VueResource = require('vue-resource')
+Vue.use(VueResource)
 
-middleware.validateLoin = function (me) {
+var middleware = {}
+
+middleware.validateLoin = function () {
   var uid = localStorage['APP_SUCCESS']
   if (!uid) {
     return false
   }
+  var me = new Vue()
+  me.$http.post('/applogin', {_id: uid}).then(function (response) {
+    var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
+    if (!result.msgcode) {
+      me.$vux.alert.show({content: result.msg})
+    }
+  })
   return true
 }
 

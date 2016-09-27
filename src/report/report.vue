@@ -131,7 +131,7 @@
           me.model.imagesPath = values
           me.model.imagesName = me.imageNames
           me.$http.post('/report', me.model).then(function (response) {
-            var result = response.data && JSON.parse(response.data)
+            var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
             this.disableSubmit = false
             this.titleSubmit = '完成'
             this.$vux.alert.show({content: result.msg})
@@ -171,7 +171,7 @@
         }
         imgArr.forEach(function (img) {
           // 判断图片格式
-          if (!(img.type.indexOf('image') === 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase()))) {
+          if (!(img.type.indexOf('image') === 0 && img.type && /\.(?:jpg|jpeg|png|gif)$/.test(img.name.toLowerCase()))) {
             me.$vux.alert.show({content: '图片只能是jpg,gif,png'})
             return false
           }

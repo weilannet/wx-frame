@@ -43,10 +43,9 @@
         ajaxHelper.createAjax('/getCateList', {category: 'depart'}),
         ajaxHelper.createAjax('/getCateList'), {category: 'professor'}],
         function (userData, departData, professorData) {
-          userData = userData && JSON.parse(userData)
-          departData = departData && JSON.parse(departData)
-          professorData = professorData && JSON.parse(professorData)
- 
+          userData = (typeof userData === 'string') ? JSON.parse(userData) : userData
+          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
+          professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData
           Object.assign(me.model, userData.data)
           me.lstdepart = [['眼底科1', '青光眼科1', '眼外伤科1']]
           me.lstdepart[0].unshift('请选择科室')
@@ -133,8 +132,7 @@
         this.model.city = this.txtaddress[1]
         this.model.area = this.txtaddress[2]
         this.$http.post('/updateInfo', this.model).then(function (response) {
-          console.log(response.data)
-          var result = response.data && JSON.parse(response.data)
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.txtsubmit = '保存'
           this.$vux.alert.show({content: result.msg})

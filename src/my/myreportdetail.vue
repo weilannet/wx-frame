@@ -45,7 +45,6 @@
       document.title = '病历详情'
       Object.assign(this.model, this.$route.query)
       this.model.state = parseInt(this.model.state)
-      console.log(this.model)
       switch (this.model.state) {
         case 0:
           this.template = '该病人信息还未处理'

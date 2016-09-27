@@ -78,7 +78,7 @@
           phone: this.txtmobile
         }
         this.$http.post('/updatePhone', data).then(function (response) {
-          var result = response.data && JSON.parse(response.data)
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.submittext = '保存'
           if (!result.msgcode) {
@@ -120,7 +120,7 @@
           mobile: this.txtmobile
         }
         this.$http.post('/getSMSCode', data).then(function (response) {
-          var result = response.data && JSON.parse(response.data)
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           if (!result.msgcode) {
             this.$vux.alert.show({content: result.msg})
             return

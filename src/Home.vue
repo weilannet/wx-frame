@@ -35,12 +35,12 @@
       </cell>
     </group>
     <group>
-      <cell title="会议报名" link="/meeting?_id=57e0f4e989a4dd03940f1185" value="">
+      <cell title="会议报名" link="/meeting" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
     </group>
     <group>
-      <cell title="审核病历" link="/check?_id=57d913c9ece91819f487a72e" value="">
+      <cell title="审核病历" link="/check?_id=57e90d75fdc0d039dcb24461" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
     </group>

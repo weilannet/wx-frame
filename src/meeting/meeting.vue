@@ -27,8 +27,8 @@
     created () {
       document.title = '会议报名'
       Object.assign(this.model, this.$route.query)
-      this.$http.post('/getMeetingInfo', {_id: this.model._id}).then(function (response) {
-        var result = response.data && JSON.parse(response.data)
+      this.$http.post('/getMeetingInfo', null).then(function (response) {
+        var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
         if (result.msgcode) {
           Object.assign(this.model, result.data)
           this.submitdisable = false

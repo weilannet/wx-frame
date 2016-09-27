@@ -29,7 +29,7 @@
   .forgotpassword {
     text-align: center;
   }
-  
+
   .forgotpassword a {
     color: #000000;
   }
@@ -77,7 +77,7 @@
           password: this.txtpwd
         }
         this.$http.post('/applogin', data).then(function (response) {
-          var result = response.data && JSON.parse(response.data)
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.txtSubmit = '登录'
           if (result.msgcode) {

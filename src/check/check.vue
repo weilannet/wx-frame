@@ -35,7 +35,7 @@
       document.title = '病历审核'
       Object.assign(this.model, this.$route.query)
       this.$http.post('/getPatientInfo', {_id: this.model._id}).then(function (response) {
-        var result = response.data && JSON.parse(response.data)
+        var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
         if (result.msgcode) {
           Object.assign(this.model, result.data)
           if (this.model.imagesPath.length > 0) {
@@ -142,21 +142,21 @@
     padding: 1rem 1rem;
     box-sizing: border-box;
   }
-  
+
   .check-content {
     background: #fff;
     width: 100%;
     padding: 0rem 1rem 1rem 1rem;
     box-sizing: border-box;
   }
-  
+
   .check-imglist {
     width: 100%;
     img {
       width: 100%;
     }
   }
-  
+
   .check-button {
     width: 100%;
     height: 2.6rem;

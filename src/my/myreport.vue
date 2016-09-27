@@ -1,7 +1,7 @@
 <template>
   <div>
    <sticky>
-      <tab :line-width=1>
+      <tab :line-width=2>
         <tab-item :selected="tabselect === $index" v-for="item in tablist" @click="tabClick($index)">{{item}}</tab-item>
       </tab>
     </sticky>
@@ -75,7 +75,7 @@ export default {
         state: this.tabselect
       }
       this.$http.post('/getPatientList', data).then(function (response) {
-        var result = response.data && JSON.parse(response.data)
+        var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
         if (result.data.total < result.data.pageSize * this.pageindex) {
           this.changePullupStatus(false)
         } else {

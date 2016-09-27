@@ -61,8 +61,7 @@
         var me = this
         this.model.state = 2
         this.$http.post('/updatePatientInfo', this.model).then(function (response) {
-          console.log(response.data)
-          var result = response.data && JSON.parse(response.data)
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.txtsubmit = '确定'
           this.$vux.alert.show({content: result.msg})

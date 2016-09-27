@@ -41,9 +41,9 @@
         ajaxHelper.createAjax('/getCateList', {category: 'depart'}),
         ajaxHelper.createAjax('/getCateList'), {category: 'professor'}],
         function (userData, departData, professorData) {
-          userData = userData && JSON.parse(userData)
-          departData = departData && JSON.parse(departData)
-          professorData = professorData && JSON.parse(professorData)
+          userData = (typeof userData === 'string') ? JSON.parse(userData) : userData
+          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
+          professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData
  
           Object.assign(me.model, userData.data)
           me.lstdepart = [['眼底科1', '青光眼科1', '眼外伤科1']]
@@ -113,7 +113,7 @@
         this.submitdisable = true
         this.$http.post('/signMeeting', { meetingId: me.$route.query.meetingId }).then(function (response) {
           console.log(response.data)
-          var result = response.data && JSON.parse(response.data)
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           if (!result.msgcode) {
             this.$vux.alert.show({content: result.msg})

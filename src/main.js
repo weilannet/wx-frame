@@ -457,12 +457,22 @@ router.beforeEach(function (transition) {
         path: transition.to.path.replace('/demo', ''),
         append: false
       })
-    } else if (!/\/login|\/updatepassword|\/register|\/agreement/.test(transition.to.path) && !middleWare.validateLoin()) {
+    } else if (/\/myreportdetail/.test(transition.to.path)) {
+      transition.next()
+    } else if (/\/report|\/myinfo|\/myreport|\/meeting/.test(transition.to.path) && !middleWare.validateLoin()) {
       var formPath = transition.to.path.toString()
       router.go({
         path: '/login',
         params: { id: formPath },
         query: { id: formPath }
+      })
+    } else if (/\/check/.test(transition.to.path) && !middleWare.validateLoin()) {
+      var checkPath = transition.to.path.toString()
+      // to do tr login
+      router.go({
+        path: '/login',
+        params: { id: checkPath },
+        query: { id: checkPath }
       })
     } else {
       transition.next()

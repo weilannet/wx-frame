@@ -31,8 +31,8 @@
         [ajaxHelper.createAjax('/getCateList', {category: 'depart'}),
         ajaxHelper.createAjax('/getCateList'), {category: 'rooms'}],
         function (departData, roomData) {
-          departData = departData && JSON.parse(departData)
-          roomData = roomData && JSON.parse(roomData)
+          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
+          roomData = (typeof roomData === 'string') ? JSON.parse(roomData) : roomData
           me.lstdepart = [['眼底组1', '青光眼组1', '眼外伤组1']]
           me.lstdepart[0].unshift('请选择组别')
           me.lstrooms = [['2201', '2202', '2203', '2204', '2205', '2206']]
@@ -109,8 +109,7 @@
         this.model.bookTime = this.txtboodTime
         this.model.state = 1
         this.$http.post('/updatePatientInfo', this.model).then(function (response) {
-          console.log(response.data)
-          var result = response.data && JSON.parse(response.data)
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.txtsubmit = '确定'
           this.$vux.toast.show({text: result.msg, type: 'text', time: 1000, width: '20em'})
