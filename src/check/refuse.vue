@@ -5,7 +5,7 @@
     <!--<cell title="接收新消息通知" value="已启用"></cell>-->
 
     <group title="">
-      <x-textarea :max="200" :value.sync="model.checkInfo" placeholder="请输入拒绝理由"  :height="250"></x-textarea>
+      <x-textarea :max="200" :value.sync="model.refuseInfo" placeholder="请输入拒绝理由"  :height="250"></x-textarea>
     </group>
 
     <box gap="30px 10px">
@@ -40,7 +40,7 @@
       return {
         model: {
           _id: '',
-          checkInfo: '',
+          refuseInfo: '',
           state: 0
         },
         submitdisable: false
@@ -52,7 +52,7 @@
           this.$vux.toast.show({text: '此病人不存在或已被审核！', type: 'text', time: 1000, width: '20em'})
           return
         }
-        if (!this.model.checkInfo) {
+        if (!this.model.refuseInfo) {
           this.$vux.toast.show({text: '请输入拒绝理由！', type: 'text', time: 1000, width: '20em'})
           return
         }

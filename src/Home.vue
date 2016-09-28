@@ -6,44 +6,42 @@
       <h1 class="vux-title" style="display:none;">
         <span class="demo-icon" slot="icon" style="font-size:60px;color:#35495e;display: block;">&#xe637;</span>
       </h1>
-      <p class="vux-notice">同仁微信端演示</p>
+      <p class="vux-notice">同仁微信客户端</p>
     </div>
-    <group>
+    <!--<group>
       <cell title="Demo" link="/demo" value="演示">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
-    </group>
+    </group>-->
     <group>
       <cell title="登录" link="/login" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
     </group>
-    <group>
-      <cell title="我的修改手机号" link="/myphone" value="">
+    <group title="个人信息">
+      <cell title="我的资料" link="/myinfo" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
-      <cell title="我的-上报记录" link="/myreport" value="">
+      <cell title="我的上报" link="/myreport" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
-      <cell title="我的-个人信息信息" link="/myinfo" value="">
+      <cell title="我的会议" link="/meeting" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
     </group>
-    <group>
+    <group title="业务功能">
       <cell title="病历上报" link="/report" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
-    </group>
-    <group>
-      <cell title="会议报名" link="/meeting" value="">
+      <cell title="修改手机号" link="/myphone" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
     </group>
-    <group>
+    <!--<group>
       <cell title="审核病历" link="/check?_id=57e90d75fdc0d039dcb24461" value="">
         <span class="demo-icon" slot="icon" style="color:#F70968">&#xe633;</span>
       </cell>
-    </group>
+    </group>-->
     <!--<group>-->
       <!--<cell title="Buy me a coffee" link="project/donate" value="捐赠">-->
         <!--<span class="demo-icon" slot="icon" style="color:red;">&#xe630;</span>-->

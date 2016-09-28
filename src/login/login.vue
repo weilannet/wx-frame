@@ -14,9 +14,7 @@
     </box>
 
     <box gap="10px 10px">
-      <a v-link="{ path: '/register' }">
-        <x-button :text="txtRegister" plain type="primary"></x-button>
-      </a>
+        <x-button :text="txtRegister" plain type="primary" @click="btnRegister"></x-button>
     </box>
 
     <box gap="20px 10px" class="forgotpassword">
@@ -65,6 +63,9 @@
       onChange (val) {
         console.log(val)
       },
+      btnRegister () {
+        window.location.href = 'http://tr-trace.com/getOAuth'
+      },
       btnLogin () {
         if (!validlib(this)) {
           return
@@ -86,7 +87,7 @@
             var pathFrom = me.$route.query.id
             me.$router.go(
               {
-                path: !pathFrom ? (result.data && result.data.realName ? '/myreport' : '/myinfo') : pathFrom,
+                path: !pathFrom ? (result.data && result.data.realName ? '/' : '/myinfo') : pathFrom,
                 params: null
               }
             )

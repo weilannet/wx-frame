@@ -38,6 +38,8 @@
   export default {
     created () {
       document.title = '注册'
+      // openid
+      this.openid = this.$route.query.openid
     },
     ready () {
     },
@@ -61,7 +63,8 @@
         txtpwd: '',
         txtpwd2: '',
         txtcode: '',
-        txtcode2: ''
+        txtcode2: '',
+        openid: ''
       }
     },
     methods: {
@@ -69,6 +72,10 @@
         this.codevalue = val + '秒后再获取'
       },
       btnSubmit () {
+        if (!this.openid) {
+          this.$vux.toast.show({text: '请从微信客户端登录注册！', type: 'text', time: 1000, width: '20em'})
+          return
+        }
         if (!validlib(this)) {
           return
         }
@@ -81,7 +88,8 @@
         this.submitdisable = true
         var data = {
           phone: this.txtmobile,
-          password: this.txtpwd
+          password: this.txtpwd,
+          openid: this.openid
         }
 
         this.$http.post('/register', data).then(function (response) {

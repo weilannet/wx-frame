@@ -93,7 +93,6 @@
         document.title = '病历上报'
       },
       onChange (val) {
-        console.log(val)
         this.sex = val
       },
       onShow () {
@@ -117,7 +116,6 @@
           return new Promise(function (resolve, reject) {
             me.$http.post('/imgUpload', {pathName: me.model.realName, imgData: value, imgName: me.imageNames[index]}).then(function (request) {
               if (request.status === 200) {
-                console.log(request.data.result)
                 resolve(request.data)
               } else {
                 reject(Error(request.statusText))
@@ -126,7 +124,6 @@
           })
         })
         Promise.all(imagesAjax).then(values => {
-          console.log(values)
           me.model.sex = me.lstSex[0].indexOf(me.txtSex[0])
           me.model.imagesPath = values
           me.model.imagesName = me.imageNames
@@ -139,7 +136,7 @@
               setTimeout(function () {
                 me.$router.go(
                   {
-                    path: '/myreport',
+                    path: '/',
                     params: null
                   }
                 )
@@ -175,8 +172,6 @@
             me.$vux.alert.show({content: '图片只能是jpg,gif,png'})
             return false
           }
-          console.log(img.size)
-          console.log(img.type)
           if (img.size > 1024 * 1024 * 3) {
             me.$vux.alert.show({content: '图片大小不可超过3M'})
             return false

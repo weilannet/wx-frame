@@ -38,7 +38,7 @@
         var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
         if (result.msgcode) {
           Object.assign(this.model, result.data)
-          if (this.model.imagesPath.length > 0) {
+          if (this.model.imagesPath && this.model.imagesPath.length > 0) {
             this.images = this.model.imagesPath
             this.disablepass = false
             this.disablerefuse = false

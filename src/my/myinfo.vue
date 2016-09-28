@@ -136,6 +136,12 @@
           this.submitdisable = false
           this.txtsubmit = '保存'
           this.$vux.alert.show({content: result.msg})
+          this.$router.go(
+            {
+              path: '/',
+              params: null
+            }
+          )
         }, function () {
         })
       }
