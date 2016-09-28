@@ -43,6 +43,11 @@
             this.disablepass = false
             this.disablerefuse = false
           }
+          if (this.model.state > 0) {
+            this.$vux.toast.show({text: '该患者已被其他医生审核！', type: 'text', time: 1000, width: '20em'})
+            this.disablepass = true
+            this.disablerefuse = true
+          }
         } else {
           this.$vux.alert.show({content: result.msg})
           this.disablepass = true

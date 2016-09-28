@@ -26,7 +26,6 @@
   export default {
     created () {
       document.title = '会议报名'
-      Object.assign(this.model, this.$route.query)
       this.$http.post('/getMeetingInfo', null).then(function (response) {
         var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
         if (result.msgcode) {

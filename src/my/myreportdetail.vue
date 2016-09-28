@@ -44,20 +44,28 @@
     created () {
       document.title = '病历详情'
       Object.assign(this.model, this.$route.query)
-      this.model.state = parseInt(this.model.state)
-      switch (this.model.state) {
-        case 0:
-          this.template = '该病人信息还未处理'
-          break
-        case 1:
-        case 3:
-        case 4:
-          this.template = `已安排${this.model.realName}患者于${this.model.bookTime}在${this.model.catetoryRoom}诊室就诊！`
-          break
-        case 2:
-          this.template = this.model.checkInfo && this.model.checkInfo || ''
-          break
-      }
+      this.$http.post('/getPatientInfo', {_id: this.model._id}).then(function (response) {
+        var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
+        if (result.msgcode) {
+          Object.assign(this.model, result.data)
+          this.model.state = parseInt(this.model.state)
+          switch (this.model.state) {
+            case 0:
+              this.template = '该病人信息还未处理'
+              break
+            case 1:
+            case 3:
+            case 4:
+              this.template = `已安排${this.model.realName}患者于${this.model.bookTime}在${this.model.catetoryRoom}诊室就诊！`
+              break
+            case 2:
+              this.template = this.model.refuseInfo && this.model.refuseInfo || ''
+              break
+          }
+        } else {
+          this.$vux.alert.show({content: result.msg})
+        }
+      })
     },
     ready () {
     },
@@ -76,10 +84,11 @@
           age: 0,
           state: 0,
           checkInfo: '',
-          images: [],
+          imagesPath: [],
           phone: '',
           bookTime: '',
-          catetoryRoom: ''
+          catetoryRoom: '',
+          refuseInfo: ''
         }
       }
     },

@@ -18,7 +18,7 @@
         <a v-link="'/meeting?_id=' + model.meetingId">查看会议详情</a>
       </div>
       <box gap="30px 10px">
-        <x-button  :text="txtsubmit"  type="primary" ></x-button>
+        <a v-link="{ path: '/' }"><x-button  :text="txtsubmit"  type="primary" ></x-button></a>
       </box>
 
     <!--<other-component/>-->

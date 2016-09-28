@@ -49,8 +49,8 @@ export default {
       this.$router.go(
         {
           path: '/myreportdetail',
-          params: item,
-          query: item
+          params: { _id: item._id },
+          query: { _id: item._id }
         }
       )
     },
