@@ -10,7 +10,7 @@
     </div>
       </box>
     <box gap="50px 10px">
-      <a v-link="{ path: '/' }"><x-button  :text="submit001"  type="primary" >确定</x-button></a>
+      <x-button  :text="submit001"  type="primary" >确定</x-button>
     </box>
 
     <!--<other-component/>-->
@@ -25,7 +25,7 @@
   import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
   export default {
     created () {
-      document.title = '接收成功'
+      document.title = '处理成功'
     },
     ready () {
     },

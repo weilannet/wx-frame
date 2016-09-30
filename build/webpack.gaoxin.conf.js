@@ -23,4 +23,22 @@ config.plugins = (config.plugins || []).concat([
   })
 ])
 
+//自动刷新浏览器
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+var browserSyncConfig = {
+  browsersync: {
+    proxy: "localhost:8602",
+    port: 8611,
+    host: 'localhost',
+    server: {
+      baseDir: [path.join(config.output.publicPath, config.output.path)]
+    },
+    reload: true,
+    startPath: 'index.html'
+  }
+};
+config.plugins = config.plugins.push([
+  new BrowserSyncPlugin(browserSyncConfig.browsersync, { reload: browserSyncConfig.browsersync.reload })
+])
+//end
 module.exports = config

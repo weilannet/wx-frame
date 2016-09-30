@@ -23,13 +23,13 @@ module.exports = {
     root: path.join(__dirname, 'node_modules')
   },
   module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        loader: "eslint-loader",
-        exclude: /node_modules/
-      }
-    ],
+    // preLoaders: [
+    //   {
+    //     test: /\.js$/,
+    //     loader: "eslint-loader",
+    //     exclude: /node_modules/
+    //   }
+    // ],
     loaders: [
       {
         test: /\.vue$/,
@@ -61,10 +61,11 @@ module.exports = {
   },
   vue: {
     loaders: {
-      js: 'babel!eslint'
+      //js: 'babel!eslint'
+      js: 'babel'
     }
-  },
-  eslint: {
-    formatter: require('eslint-friendly-formatter')
   }
+  // eslint: {
+  //   formatter: require('eslint-friendly-formatter')
+  // }
 }
