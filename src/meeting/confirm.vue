@@ -7,7 +7,7 @@
       <cell title="医院" :value.sync="model.hospital"></cell>
       <cell title="科室" :value.sync="txtdepart"></cell>
       <cell title="职称" :value.sync="txtprofessor"></cell>
-      
+
     </group>
 
     <div class="confirmfont">
@@ -30,7 +30,7 @@
   import { XButton, Group, Cell, Box, Icon, Selector, PopupPicker, Address, AddressChinaData } from '../components'
   import value2name from '../filters/value2name'
   var ajaxHelper = require('../libs/ajax')
-  
+
   export default {
     created () {
       document.title = '确认报名'
@@ -44,11 +44,11 @@
           userData = (typeof userData === 'string') ? JSON.parse(userData) : userData
           departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
           professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData
- 
+
           Object.assign(me.model, userData.data)
-          me.lstdepart = [['眼底科1', '青光眼科1', '眼外伤科1']]
+          me.lstdepart = [['眼底科', '青光眼科', '眼外伤科']]
           me.lstdepart[0].unshift('请选择科室')
-          me.lstprofessor = [['主治医师1', '主任医师1', '副主任医师1']]
+          me.lstprofessor = [['主治医师', '主任医师', '副主任医师']]
           me.lstprofessor[0].unshift('请选择职称')
           me.txtaddress = [
             !me.model.province ? '110000' : me.model.province,

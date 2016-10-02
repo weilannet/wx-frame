@@ -12,7 +12,6 @@ import AlertPlugin from './plugins/alert'
 
 // function
 import Login from './login/login'
-import TRLogin from './login/trlogin'
 import MyInfo from './my/myinfo'
 import MyReport from './my/myreport'
 import MyReportDetail from './my/myreportdetail'
@@ -65,9 +64,6 @@ router.map({
     '/login': {
         component: Login
     },
-    '/trlogin': {
-        component: TRLogin
-    },
     '/register': {
         component: Register
     },
@@ -108,20 +104,12 @@ router.beforeEach(function(transition) {
         window.location.href = `http${url}`
     } else if (/\/myreportdetail/.test(transition.to.path)) {
         transition.next()
-    } else if (/\/report|\/myinfo|\/myreport|\/meeting/.test(transition.to.path) && !middleWare.validateLoin(0)) {
+    } else if (/\/report|\/myinfo|\/myreport|\/meeting/.test(transition.to.path) && !middleWare.validateLoin()) {
         var formPath = transition.to.path.toString()
         router.go({
             path: '/login',
             params: { id: formPath },
             query: { id: formPath }
-        })
-    } else if (/\/check/.test(transition.to.path) && !middleWare.validateLoin(1)) {
-        var checkPath = transition.to.path.toString()
-            // to do tr login
-        router.go({
-            path: '/trlogin',
-            params: { id: checkPath },
-            query: { id: checkPath }
         })
     } else {
         transition.next()

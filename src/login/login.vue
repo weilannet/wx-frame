@@ -87,7 +87,7 @@
             var pathFrom = me.$route.query.id
             me.$router.go(
               {
-                path: !pathFrom ? (result.data && result.data.realName ? '/' : '/myinfo') : pathFrom,
+                path: !pathFrom ? '/myinfo' : pathFrom,
                 params: null
               }
             )

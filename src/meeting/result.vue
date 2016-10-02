@@ -2,9 +2,9 @@
   <div>
 
       <div class="confirmfont">
-        <div class="success"><icon type="success" class="icon_big"></icon>报名成功</div>
+        <div class="success"><icon type="success" class="icon_big"></icon>{{model.signstate == 2 ? '参会' : '报名'}}成功</div>
         <br/>
-        <span>您以成功报名{{model.title}}会议！</span>
+        <span>您以成功{{model.signstate == 2 ? '参会' : '报名'}}{{model.title}}会议！</span>
         <br/>
         <span>请保存下方二维码做为参会唯一凭证！</span>
         <br/>
@@ -18,7 +18,7 @@
         <a v-link="'/meeting?_id=' + model.meetingId">查看会议详情</a>
       </div>
       <box gap="30px 10px">
-        <a v-link="{ path: '/' }"><x-button  :text="txtsubmit"  type="primary" ></x-button></a>
+        <a v-link="{ path: '/meeting' }"><x-button  :text="txtsubmit"  type="primary" ></x-button></a>
       </box>
 
     <!--<other-component/>-->
@@ -50,7 +50,8 @@
         model: {
           title: '',
           meetingId: '',
-          code: ''
+          code: '',
+          signstate: 0
         },
         txtsubmit: '确定'
       }

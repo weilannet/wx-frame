@@ -3,36 +3,48 @@
     <!--<header-component/>-->
 
     <!--<cell title="接收新消息通知" value="已启用"></cell>-->
-    <div><icon type="info"></icon>以下信息仅认证使用，不会公开</div>
+    <div>
+      <icon type="info"></icon>以下信息仅认证使用，不会公开</div>
     <group title="">
+      <a v-link="{ path: '/myphone' }">
       <cell title="手机号码" :value.sync="model.phone"></cell>
+       </a>
       <x-input title="姓名" name="username" :value.sync="model.realName" placeholder="请输入姓名" is-type="china-name" required v-ref:inputname></x-input>
 
       <address :title="titlecity" :value.sync="txtaddress" raw-value :list="addressData"></address>
 
-      <x-input title="医院" name="username" :value.sync="model.hospital" placeholder="请务必填写正确的医院名称" is-type="china-name" required v-ref:inputhospital></x-input>
+      <x-input title="医院" name="username" :value.sync="model.hospital" placeholder="请务必填写正确的医院名称" is-type="china-name" required
+        v-ref:inputhospital></x-input>
 
       <popup-picker :title="titledepart" :data="lstdepart" :value.sync="txtdepart" @on-show="onShow" @on-hide="onHide"></popup-picker>
       <popup-picker :title="titleprofessor" :data="lstprofessor" :value.sync="txtprofessor" @on-show="onShow" @on-hide="onHide"></popup-picker>
 
     </group>
 
-      <box gap="30px 10px">
-        <x-button  :disabled="submitdisable" :text="txtsubmit"  type="primary" @click="btnSubmit"></x-button>
+    <box gap="30px 10px">
+      <x-button :disabled="submitdisable" :text="txtsubmit" type="primary" @click="btnSubmit"></x-button>
+    </box>
 
-      </box>
+    <!--<box gap="30px 10px">
+      <a v-link="{ path: '/updatepassword' }">
+        <x-button text="修改密码" plain type="primary"></x-button>
+      </a>
+    </box>-->
+
+        <box gap="30px 10px">
+      <x-button text="退出登录" plain  type="primary"  @click="btnLoginout"></x-button>
+    </box>
 
     <!--<other-component/>-->
   </div>
 </template>
 <style>
-  body{
-
-  }
+  body {}
 </style>
 <script>
   import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Address, AddressChinaData } from '../components'
   var ajaxHelper = require('../libs/ajax')
+  const middleWare = require('../libs/middleware')
   import validlib from '../libs/validate'
   export default {
     created () {
@@ -43,21 +55,21 @@
         ajaxHelper.createAjax('/getCateList', {category: 'depart'}),
         ajaxHelper.createAjax('/getCateList'), {category: 'professor'}],
         function (userData, departData, professorData) {
-          userData = (typeof userData === 'string') ? JSON.parse(userData) : userData
-          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
-          professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData
-          Object.assign(me.model, userData.data)
-          me.lstdepart = [['眼底科1', '青光眼科1', '眼外伤科1']]
-          me.lstdepart[0].unshift('请选择科室')
-          me.lstprofessor = [['主治医师1', '主任医师1', '副主任医师1']]
-          me.lstprofessor[0].unshift('请选择职称')
+          userData = (typeof userData === 'string') ? JSON.parse(userData) : userData;
+          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData;
+          professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData;
+          Object.assign(me.model, userData.data);
+          me.lstdepart = [['眼底科', '青光眼科', '眼外伤科']];
+          me.lstdepart[0].unshift('请选择科室');
+          me.lstprofessor = [['主治医师', '主任医师', '副主任医师']];
+          me.lstprofessor[0].unshift('请选择职称');
           me.txtaddress = [
             !me.model.province ? '110000' : me.model.province,
             !me.model.city ? '110100' : me.model.city,
             !me.model.area ? '110101' : me.model.area
-          ]
-          me.txtdepart = [!me.model.department ? '请选择科室' : me.lstdepart[0][me.model.department]]
-          me.txtprofessor = [!me.model.position ? '请选择职称' : me.lstprofessor[0][me.model.position]]
+          ];
+          me.txtdepart = [!me.model.department ? '请选择科室' : me.lstdepart[0][me.model.department]];
+          me.txtprofessor = [!me.model.position ? '请选择职称' : me.lstprofessor[0][me.model.position]];
           // console.log(userData)
           // console.log(departData)
           // console.log(professorData)
@@ -106,36 +118,49 @@
     },
     methods: {
       onShow () {
-        console.log('on show')
+        console.log('on show');
       },
       onHide (type) {
-        console.log('on hide', type)
+        console.log('on hide', type);
+      },
+      btnLoginout () {
+        middleWare.exitLogin();
+        var me = this;
+        setTimeout(function () {
+          me.$router.go(
+            {
+              path: '/login',
+              params: null
+            }
+          )
+        },500);
+         
       },
       btnSubmit () {
         if (!validlib(this)) {
-          return
+          return;
         }
         if (this.txtdepart[0] === '请选择科室') {
-          this.$vux.toast.show({ text: '请选择科室!', type: 'text', time: 1000, width: '20em' })
-          return
+          this.$vux.toast.show({ text: '请选择科室!', type: 'text', time: 1000, width: '20em' });
+          return;
         }
         if (this.txtprofessor[0] === '请选择职称') {
-          this.$vux.toast.show({ text: '请选择职称！', type: 'text', time: 1000, width: '20em' })
-          return
+          this.$vux.toast.show({ text: '请选择职称！', type: 'text', time: 1000, width: '20em' });
+          return;
         }
-        this.txtsubmit = '正在提交'
-        this.submitdisable = true
+        this.txtsubmit = '正在提交';
+        this.submitdisable = true;
         // model
-        this.model.department = this.lstdepart[0].indexOf(this.txtdepart[0])
-        this.model.position = this.lstprofessor[0].indexOf(this.txtprofessor[0])
-        this.model.province = this.txtaddress[0]
-        this.model.city = this.txtaddress[1]
-        this.model.area = this.txtaddress[2]
+        this.model.department = this.lstdepart[0].indexOf(this.txtdepart[0]);
+        this.model.position = this.lstprofessor[0].indexOf(this.txtprofessor[0]);
+        this.model.province = this.txtaddress[0];
+        this.model.city = this.txtaddress[1];
+        this.model.area = this.txtaddress[2];
         this.$http.post('/updateInfo', this.model).then(function (response) {
-          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-          this.submitdisable = false
-          this.txtsubmit = '保存'
-          this.$vux.alert.show({content: result.msg})
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
+          this.submitdisable = false;
+          this.txtsubmit = '保存';
+          this.$vux.alert.show({content: result.msg});
           // this.$router.go(
           //   {
           //     path: '/',

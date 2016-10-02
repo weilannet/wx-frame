@@ -83,7 +83,6 @@
         }
 
         this.$http.post('/updatePassword', data).then(function (response) {
-          console.log(response.data)
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.submittext = '保存'
@@ -111,7 +110,6 @@
         this.time = this.origintime
       },
       pwdChange (val) {
-        console.log(val)
         this.txtpwd2 = ''
       },
       phoneChange (val) {

@@ -34,7 +34,7 @@
     created () {
       document.title = '病历审核'
       Object.assign(this.model, this.$route.query)
-      this.$http.post('/getPatientInfo', {_id: this.model._id}).then(function (response) {
+      this.$http.post('/getPatientInfo', {_id: this.model._id, check: true}).then(function (response) {
         var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
         if (result.msgcode) {
           Object.assign(this.model, result.data)

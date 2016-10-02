@@ -33,7 +33,7 @@
           this.submitdisable = false
           if (this.model.code) {
             this.issign = true
-            this.txtmeeting = '已报名，点击查看详情'
+            this.txtmeeting = this.model.signstate == 1 ? '已报名，点击查看二维码' : '已参会，点击查看二维码'
             return
           }
           this.issign = false
@@ -81,8 +81,8 @@
         this.$router.go(
           {
             path: '/result',
-            params: { meetingId: this.model._id, code: this.model.code, title: this.model.title },
-            query: { meetingId: this.model._id, code: this.model.code, title: this.model.title }
+            params: { meetingId: this.model._id, code: this.model.code, title: this.model.title, signstate: this.model.signstate },
+            query: { meetingId: this.model._id, code: this.model.code, title: this.model.title, signstate: this.model.signstate }
           })
       }
     }

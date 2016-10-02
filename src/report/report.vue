@@ -136,7 +136,7 @@
               setTimeout(function () {
                 me.$router.go(
                   {
-                    path: '/',
+                    path: '/myreport',
                     params: null
                   }
                 )
