@@ -104,7 +104,7 @@ router.beforeEach(function(transition) {
         window.location.href = `http${url}`
     } else if (/\/myreportdetail/.test(transition.to.path)) {
         transition.next()
-    } else if (/\/report|\/myinfo|\/myreport|\/meeting/.test(transition.to.path) && !middleWare.validateLoin()) {
+    } else if (/\/check|\/report|\/myinfo|\/myreport|\/meeting/.test(transition.to.path) && !middleWare.validateLoin()) {
         var formPath = transition.to.path.toString()
         router.go({
             path: '/login',
