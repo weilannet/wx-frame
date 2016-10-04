@@ -9,7 +9,7 @@
 
     <group>
       <cell title="基本诊断" value=""></cell>
-      <x-textarea :max="200" :value.sync="model.checkInfo" placeholder="请输入诊断信息..." :show-counter="false" :height="200" :rows="8"
+      <x-textarea :max="200" :value.sync="model.checkInfo" placeholder="请输入诊断信息..." :show-counter="true" :height="200" :rows="8"
         :cols="30" required v-ref:inputcontent></x-textarea>
     </group>
 

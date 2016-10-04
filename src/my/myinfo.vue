@@ -1,11 +1,8 @@
 <template>
   <div>
-    <!--<header-component/>-->
-
-    <!--<cell title="接收新消息通知" value="已启用"></cell>-->
-    <div>
-      <icon type="info"></icon>以下信息仅认证使用，不会公开</div>
-    <group title="">
+     
+    <!--<div><icon type="info"></icon>以下信息仅认证使用，不会公开</div>-->
+    <group title="以下信息仅认证使用，不会公开">
       <a v-link="{ path: '/myphone' }">
       <cell title="手机号码" :value.sync="model.phone"></cell>
        </a>
@@ -19,6 +16,12 @@
       <popup-picker :title="titledepart" :data="lstdepart" :value.sync="txtdepart" @on-show="onShow" @on-hide="onHide"></popup-picker>
       <popup-picker :title="titleprofessor" :data="lstprofessor" :value.sync="txtprofessor" @on-show="onShow" @on-hide="onHide"></popup-picker>
 
+    </group>
+
+    <group title="需要会议资料需要填写以下信息">
+      <cell title="邮寄地址" value=""></cell>
+      <x-textarea :max="50" :value.sync="model.address" placeholder="请输入邮寄地址..." :show-counter="true" :height="60" :rows="8"
+        :cols="30" ></x-textarea>
     </group>
 
     <box gap="30px 10px">
@@ -42,7 +45,7 @@
   body {}
 </style>
 <script>
-  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Address, AddressChinaData } from '../components'
+  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Address, AddressChinaData, XTextarea } from '../components'
   var ajaxHelper = require('../libs/ajax')
   const middleWare = require('../libs/middleware')
   import validlib from '../libs/validate'
@@ -88,7 +91,8 @@
       Box,
       Icon,
       Address,
-      AddressChinaData
+      AddressChinaData,
+      XTextarea
     },
     data () {
       return {
@@ -101,7 +105,8 @@
           phone: '',
           province: '',
           city: '',
-          area: ''
+          area: '',
+          address: ''
         },
         addressData: AddressChinaData,
         titlecity: '城市',
