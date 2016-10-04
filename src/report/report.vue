@@ -90,48 +90,48 @@
     },
     methods: {
       created () {
-        document.title = '病历上报'
+        document.title = '病历上报';
       },
       onChange (val) {
-        this.sex = val
+        this.sex = val;
       },
       onShow () {
-        console.log('on show')
+        console.log('on show');
       },
       onHide (type) {
-        console.log('on hide', type)
+        console.log('on hide', type);
       },
       btnSubmit () {
         if (!validlib(this)) {
-          return
+          return;
         }
         if (!this.model.checkInfo) {
-          this.$vux.toast.show({text: '请输入诊断信息！', type: 'text', time: 1000, width: '20em'})
-          return
+          this.$vux.toast.show({text: '请输入诊断信息！', type: 'text', time: 1000, width: '20em'});
+          return;
         }
-        this.titleSubmit = '正在提交'
-        this.disableSubmit = true
-        var me = this
+        this.titleSubmit = '正在提交';
+        this.disableSubmit = true;
+        var me = this;
         var imagesAjax = this.images.map(function (value, index) {
           return new Promise(function (resolve, reject) {
             me.$http.post('/imgUpload', {pathName: me.model.realName, imgData: value, imgName: me.imageNames[index]}).then(function (request) {
               if (request.status === 200) {
-                resolve(request.data)
+                resolve(request.data);
               } else {
-                reject(Error(request.statusText))
+                reject(Error(request.statusText));
               }
-            })
+            });
           })
         })
         Promise.all(imagesAjax).then(values => {
-          me.model.sex = me.lstSex[0].indexOf(me.txtSex[0])
-          me.model.imagesPath = values
-          me.model.imagesName = me.imageNames
+          me.model.sex = me.lstSex[0].indexOf(me.txtSex[0]);
+          me.model.imagesPath = values;
+          me.model.imagesName = me.imageNames;
           me.$http.post('/report', me.model).then(function (response) {
-            var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-            this.disableSubmit = false
-            this.titleSubmit = '完成'
-            this.$vux.alert.show({content: result.msg})
+            var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
+            this.disableSubmit = false;
+            this.titleSubmit = '完成';
+            this.$vux.alert.show({content: result.msg});
             if (result.msgcode) {
               setTimeout(function () {
                 me.$router.go(
@@ -139,48 +139,48 @@
                     path: '/myreport',
                     params: null
                   }
-                )
-              }, 500)
+                );
+              }, 500);
             }
           })
         })
       },
       closeClick (index) {
-        this.images.splice(index, 1)
-        this.imageNames.splice(index, 1)
-        this.currentCount = this.currentCount - 1
+        this.images.splice(index, 1);
+        this.imageNames.splice(index, 1);
+        this.currentCount = this.currentCount - 1;
       },
       preImg (event) {
         if (!this.model.realName) {
-          this.$vux.alert.show({content: '请先填写病人名称！'})
-          return false
+          this.$vux.alert.show({content: '请先填写病人名称！'});
+          return false;
         }
-        var me = this
-        me.currentCount += event.target.files.length
+        var me = this;
+        me.currentCount += event.target.files.length;
         if (this.currentCount > 9) {
-          this.$vux.alert.show({content: '最多可选择9张图片，请重新选择！'})
-          me.currentCount = 0
-          return false
+          this.$vux.alert.show({content: '最多可选择9张图片，请重新选择！'});
+          me.currentCount = 0;
+          return false;
         }
-        var imgArr = Array.prototype.slice.call(event.target.files)
+        var imgArr = Array.prototype.slice.call(event.target.files);
         if (!imgArr && imgArr.length > 0) {
-          return
+          return;
         }
         imgArr.forEach(function (img) {
           // 判断图片格式
           if (!(img.type.indexOf('image') === 0 && img.type && /\.(?:jpg|jpeg|png|gif)$/.test(img.name.toLowerCase()))) {
             me.$vux.alert.show({content: '图片只能是jpg,gif,png'})
-            return false
+            return false;
           }
           if (img.size > 1024 * 1024 * 3) {
             me.$vux.alert.show({content: '图片大小不可超过3M'})
-            return false
+            return false;
           }
-          var reader = new FileReader()
-          reader.readAsDataURL(img)
+          var reader = new FileReader();
+          reader.readAsDataURL(img);
           reader.onload = function (e) {
-            me.images.push(e.target.result)
-            me.imageNames.push(img.name)
+            me.images.push(e.target.result);
+            me.imageNames.push(img.name);
           }
         })
       }

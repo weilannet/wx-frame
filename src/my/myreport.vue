@@ -8,7 +8,7 @@
     <scroller lock-x scrollbar-y use-pullup use-pulldown :pullup-config="pullupConfig2" :pulldown-config={content:'下拉刷新',downContent:'下拉刷新',upContent:'释放刷新',loadingContent:'加载中'} @pullup:loading="loadMore" @pulldown:loading="refresh" :pullup-status.sync="pullupStatus" v-ref:scroller>
       <div class="box2">
         <group class="myreport-item" v-for="item in reportlist" track-by="Math.random()*1000+_id" @click="itemClick(item)">
-          <cell :title="item.realName+'&nbsp;&nbsp;'+(item.sex==0?'女':'男')+'&nbsp;&nbsp;'+item.age">{{stateBind(item.state)}}</cell>
+          <cell :title="item.realName+'&nbsp;&nbsp;'+(item.sex==0?'男':'女')+'&nbsp;&nbsp;'+item.age">{{stateBind(item.state)}}</cell>
           <cell title="诊断结果:"></cell>
           <div class="myreport-content">{{item.checkInfo}}</div>
         </group>

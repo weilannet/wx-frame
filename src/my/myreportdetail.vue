@@ -20,7 +20,7 @@
     </div>
 
     <group class="myreport-item">
-      <cell :title="model.realName+'&nbsp;&nbsp;'+(model.sex==0?'女':'男')+'&nbsp;&nbsp;'+model.age" >{{model.phone}}</cell>
+      <cell :title="model.realName+'&nbsp;&nbsp;'+(model.sex==0?'男':'女')+'&nbsp;&nbsp;'+model.age" >{{model.phone}}</cell>
     </group>
         <div class="myreport-title">基本诊断：</div>
         <div class="myreport-content">
