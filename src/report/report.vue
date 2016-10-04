@@ -38,9 +38,8 @@
     <box gap="30px 10px">
       <x-button :text="titleSubmit" :disabled="disableSubmit" type="primary" @click="btnSubmit"></x-button>
     </box>
-    <toast :show.sync="showToast" :time="1000">上报成功</toast>
     <!--<other-component/>-->
-
+    <loading :show="showLoading" :text="showText"></loading>
   </div>
 </template>
 <style lang="less">
@@ -48,13 +47,13 @@
   @import '../styles/weui/weui.min.css';
 </style>
 <script>
-  import { Toast, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
+  import { Loading, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
   import validlib from '../libs/validate'
   export default {
     ready () {
     },
     components: {
-      Toast,
+      Loading,
       Selector,
       PopupPicker,
       XInput,
@@ -81,7 +80,8 @@
         titleSex: '性别',
         txtSex: ['男'],
         lstSex: [['男', '女']],
-        showToast: false,
+        showLoading: false,
+        showText: '',
         titleSubmit: '完成',
         disableSubmit: false,
         totalCount: 9,
@@ -109,13 +109,17 @@
           this.$vux.toast.show({text: '请输入诊断信息！', type: 'text', time: 1000, width: '20em'});
           return;
         }
+        this.showLoading = true;
+        this.showText = '正在连接服务器...';
         this.titleSubmit = '正在提交';
         this.disableSubmit = true;
         var me = this;
         var imagesAjax = this.images.map(function (value, index) {
+          var _index = index + 1;
           return new Promise(function (resolve, reject) {
             me.$http.post('/imgUpload', {pathName: me.model.realName, imgData: value, imgName: me.imageNames[index]}).then(function (request) {
               if (request.status === 200) {
+                this.showText = '图片正在上传...' + _index;
                 resolve(request.data);
               } else {
                 reject(Error(request.statusText));
@@ -123,16 +127,23 @@
             });
           })
         })
+        
         Promise.all(imagesAjax).then(values => {
           me.model.sex = me.lstSex[0].indexOf(me.txtSex[0]);
           me.model.imagesPath = values;
           me.model.imagesName = me.imageNames;
+          
+          this.showText = '图片上传完成,数据提交中...';
           me.$http.post('/report', me.model).then(function (response) {
+            this.showText = '';
+            this.showLoading = false;
+            
             var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
             this.disableSubmit = false;
             this.titleSubmit = '完成';
             this.$vux.alert.show({content: result.msg});
             if (result.msgcode) {
+              
               setTimeout(function () {
                 me.$router.go(
                   {
