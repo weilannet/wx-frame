@@ -11,7 +11,7 @@
      </div>
 
      <div class="meeting-content">
-       {{model.content}}
+       {{{model.content}}}
      </div>
 
    </div>
