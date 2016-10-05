@@ -28,7 +28,7 @@
       document.title = '会议报名'
       this.$http.post('/getMeetingInfo', null).then(function (response) {
         var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-        if (result.msgcode) {
+        if (result.status) {
           Object.assign(this.model, result.data)
           this.submitdisable = false
           if (this.model.code) {
@@ -38,7 +38,7 @@
           }
           this.issign = false
         } else {
-          this.$vux.alert.show({content: result.msg})
+          this.$vux.alert.show({content: result.message})
           this.txtmeeting = '不可报名'
           this.submitdisable = true
         }

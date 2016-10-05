@@ -81,7 +81,7 @@ export default {
         } else {
           this.changePullupStatus(true)
         }
-        if (result.msgcode) {
+        if (result.status) {
           if (this.pageindex === 1) {
             this.$set('reportlist', result.data.data)
           } else {
@@ -92,7 +92,7 @@ export default {
           }
           return
         }
-        this.$vux.alert.show({content: result.msg})
+        this.$vux.alert.show({content: result.message})
       })
     },
     loadMore (uuid) {

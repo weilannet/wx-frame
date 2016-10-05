@@ -81,7 +81,7 @@
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.txtSubmit = '登录'
-          if (result.msgcode) {
+          if (result.status) {
             localStorage['APP_SUCCESS'] = result.data._id
             this.$vux.alert.show({content: '登录成功！'})
             var pathFrom = me.$route.query.id

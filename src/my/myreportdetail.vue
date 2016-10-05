@@ -46,7 +46,7 @@
       Object.assign(this.model, this.$route.query)
       this.$http.post('/getPatientInfo', {_id: this.model._id}).then(function (response) {
         var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-        if (result.msgcode) {
+        if (result.status) {
           Object.assign(this.model, result.data)
           this.model.state = parseInt(this.model.state)
           switch (this.model.state) {
@@ -63,7 +63,7 @@
               break
           }
         } else {
-          this.$vux.alert.show({content: result.msg})
+          this.$vux.alert.show({content: result.message})
         }
       })
     },

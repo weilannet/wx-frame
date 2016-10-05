@@ -165,7 +165,7 @@
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
           this.submitdisable = false;
           this.txtsubmit = '保存';
-          this.$vux.alert.show({content: result.msg});
+          this.$vux.alert.show({content: result.message});
           // this.$router.go(
           //   {
           //     path: '/',

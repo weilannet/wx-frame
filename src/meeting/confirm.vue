@@ -115,8 +115,8 @@
           console.log(response.data)
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
-          if (!result.msgcode) {
-            this.$vux.alert.show({content: result.msg})
+          if (!result.status) {
+            this.$vux.alert.show({content: result.message})
             return
           }
           setTimeout(function () {

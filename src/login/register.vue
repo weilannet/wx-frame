@@ -96,8 +96,8 @@
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.submittext = '注册'
-          if (!result.msgcode) {
-            this.$vux.alert.show({content: result.msg})
+          if (!result.status) {
+            this.$vux.alert.show({content: result.message})
             return
           }
           this.$vux.toast.show({text: '注册成功！', type: 'text', time: 500, width: '20em'})
@@ -137,8 +137,8 @@
         }
         this.$http.post('/getSMSCode', data).then(function (response) {
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-          if (!result.msgcode) {
-            this.$vux.alert.show({content: result.msg})
+          if (!result.status) {
+            this.$vux.alert.show({content: result.message})
             return
           }
           this.txtcode2 = result.data

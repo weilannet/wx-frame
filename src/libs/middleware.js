@@ -25,8 +25,8 @@ middleware.validateLoin = function () {
    
   me.$http.post(('/applogin'), {_id: uid}).then(function (response) {
     var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-    if (!result.msgcode) {
-      me.$vux.alert.show({content: result.msg})
+    if (!result.status) {
+      me.$vux.alert.show({content: result.message})
     }
   })
   return true

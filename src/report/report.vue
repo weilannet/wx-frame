@@ -141,8 +141,8 @@
             var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
             this.disableSubmit = false;
             this.titleSubmit = '完成';
-            this.$vux.alert.show({content: result.msg});
-            if (result.msgcode) {
+            this.$vux.alert.show({content: result.message});
+            if (result.status) {
               
               setTimeout(function () {
                 me.$router.go(

@@ -36,7 +36,7 @@
       Object.assign(this.model, this.$route.query)
       this.$http.post('/getPatientInfo', {_id: this.model._id, check: true}).then(function (response) {
         var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-        if (result.msgcode) {
+        if (result.status) {
           Object.assign(this.model, result.data)
           if (this.model.imagesPath && this.model.imagesPath.length > 0) {
             this.images = this.model.imagesPath
@@ -49,7 +49,7 @@
             this.disablerefuse = true
           }
         } else {
-          this.$vux.alert.show({content: result.msg})
+          this.$vux.alert.show({content: result.message})
           this.disablepass = true
           this.disablerefuse = true
         }

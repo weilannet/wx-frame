@@ -112,8 +112,8 @@
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           this.submitdisable = false
           this.txtsubmit = '确定'
-          this.$vux.toast.show({text: result.msg, type: 'text', time: 1000, width: '20em'})
-          if (result.msgcode) {
+          this.$vux.toast.show({text: result.message, type: 'text', time: 1000, width: '20em'})
+          if (result.status) {
             setTimeout(function () {
               me.$router.go(
                 {
