@@ -28,6 +28,7 @@
 </style>
 <script>
   import { XButton, Group, Cell, Box, Icon, Selector, PopupPicker, Address, AddressChinaData } from '../components'
+  const _ = require('underscore');
   import value2name from '../filters/value2name'
   var ajaxHelper = require('../libs/ajax')
 
@@ -38,28 +39,40 @@
       document.title = '身份认证'
       ajaxHelper.sendAjax(
         [ajaxHelper.createAjax('/getUserInfo'),
-        ajaxHelper.createAjax('/getCateList', {category: 'depart'}),
-        ajaxHelper.createAjax('/getCateList'), {category: 'professor'}],
+        ajaxHelper.createAjax('/getCateList', {category: '科室'}),
+        ajaxHelper.createAjax('/getCateList', {category: '职称'})],
         function (userData, departData, professorData) {
           userData = (typeof userData === 'string') ? JSON.parse(userData) : userData
           departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
           professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData
-
           Object.assign(me.model, userData.data)
-          me.lstdepart = [['眼底科', '青光眼科', '眼外伤科']]
-          me.lstdepart[0].unshift('请选择科室')
-          me.lstprofessor = [['主治医师', '主任医师', '副主任医师']]
-          me.lstprofessor[0].unshift('请选择职称')
           me.txtaddress = [
             !me.model.province ? '110000' : me.model.province,
             !me.model.city ? '110100' : me.model.city,
             !me.model.area ? '110101' : me.model.area
-          ]
-          me.txtdepart = [!me.model.department ? '未设置科室' : me.lstdepart[0][me.model.department]]
-          me.txtprofessor = [!me.model.position ? '未设置职称' : me.lstprofessor[0][me.model.position]]
-          // console.log(userData)
-          // console.log(departData)
-          // console.log(professorData)
+          ] 
+
+          if (!departData.status || !professorData.status) {
+            return;
+          }
+          //诊室
+          me.ajaxdepartData = departData.data;
+          me.ajaxdepartData.forEach(function(item) { me.lstdepart[0].push(item.title)});
+          //职称
+          me.ajaxprofessorData = professorData.data;
+          me.ajaxprofessorData.forEach(function(item) { me.lstprofessor[0].push(item.title)});
+          
+          var existdepart = null;
+          if (me.model.department && me.ajaxdepartData.length > 0) {
+              existdepart = _.where(me.ajaxdepartData, {_id: me.model.department});
+          }
+          var existprofessor = null;
+          if (me.model.position && me.ajaxprofessorData.length > 0) {
+              existprofessor = _.where(me.ajaxprofessorData, {_id: me.model.position});
+          }
+      
+          me.txtdepart = [(!me.model.department || existdepart && existdepart.length ==0) ? '请选择科室' : existdepart[0].title];
+          me.txtprofessor = [(!me.model.position || existprofessor && existprofessor.length ==0) ? '请选择职称' : existprofessor[0].title];
         }
       )
     },
@@ -92,11 +105,13 @@
         addressData: AddressChinaData,
         txtsubmit: '确认报名',
         submitdisable: false,
-        txtdepart: ['眼底科'],
-        txtprofessor: ['主治医师'],
+        txtdepart: ['请选择科室'],
+        txtprofessor: ['请选择职称'],
+        ajaxdepartData: null,
+        ajaxprofessorData: null,
         txtaddress: ['110000', '110100', '110101'],
-        lstdepart: [['眼底科', '青光眼科', '眼外伤科']],
-        lstprofessor: [['主治医师', '主任医师', '副主任医师']]
+        lstdepart: [['请选择科室']],
+        lstprofessor: [['请选择职称']]
       }
     },
     methods: {

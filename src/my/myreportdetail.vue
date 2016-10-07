@@ -56,7 +56,7 @@
             case 1:
             case 3:
             case 4:
-              this.template = `已安排${this.model.realName}患者于${this.model.bookTime}在${this.model.catetoryRoom}诊室就诊！`
+              this.template = `已安排${this.model.realName}患者于${this.model.bookTime}在${this.model.categoryRoom}诊室就诊！`
               break
             case 2:
               this.template = this.model.refuseInfo && this.model.refuseInfo || ''

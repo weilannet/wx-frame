@@ -28,6 +28,7 @@ import Register from './login/register'
 import UpdatePassword from './login/updatepassword'
 import AgreeMent from './login/agreement'
 
+
 const middleWare = require('./libs/middleware')
 const FastClick = require('fastclick')
 FastClick.attach(document.body)

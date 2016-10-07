@@ -43,6 +43,7 @@
     "photoswipe": "^4.1.1",
     "qr.js": "0.0.0",
     "shake.js": "^1.2.2",
+    "underscore": "^1.8.3",
     "validator": "^5.1.0",
     "vue-resource": "^0.9.3",
     "vux-blazy": "^1.6.4",
