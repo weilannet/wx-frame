@@ -115,11 +115,11 @@
         this.disableSubmit = true;
         var me = this;
         var imagesAjax = this.images.map(function (value, index) {
-          var _index = index + 1;
+          var _index = 1;
           return new Promise(function (resolve, reject) {
             me.$http.post('/imgUpload', {pathName: me.model.realName, imgData: value, imgName: me.imageNames[index]}).then(function (request) {
               if (request.status === 200) {
-                this.showText = '图片正在上传...' + _index;
+                this.showText = '图片正在上传...' + _index++;
                 resolve(request.data);
               } else {
                 reject(Error(request.statusText));
