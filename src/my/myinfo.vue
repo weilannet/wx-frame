@@ -6,11 +6,11 @@
       <a v-link="{ path: '/myphone' }">
       <cell title="手机号码" :value.sync="model.phone"></cell>
        </a>
-      <x-input title="姓名" name="username" :value.sync="model.realName" placeholder="请输入姓名" is-type="china-name" required v-ref:inputname></x-input>
+      <x-input text-align="right" title="姓名" name="username" :value.sync="model.realName" placeholder="请输入姓名" is-type="china-name" required v-ref:inputname></x-input>
 
       <address :title="titlecity" :value.sync="txtaddress" raw-value :list="addressData"></address>
 
-      <x-input title="医院" name="username" :value.sync="model.hospital" placeholder="请务必填写正确的医院名称" is-type="china-name" required
+      <x-input title="医院" text-align="right" name="username" :value.sync="model.hospital" placeholder="请务必填写正确的医院名称" is-type="china-name" required
         v-ref:inputhospital></x-input>
 
       <popup-picker :title="titledepart" :data="lstdepart" :value.sync="txtdepart" @on-show="onShow" @on-hide="onHide"></popup-picker>

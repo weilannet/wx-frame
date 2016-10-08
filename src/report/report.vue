@@ -115,11 +115,11 @@
         this.disableSubmit = true;
         var me = this;
         var imagesAjax = this.images.map(function (value, index) {
-          var _index = 1;
+          
           return new Promise(function (resolve, reject) {
             me.$http.post('/imgUpload', {pathName: me.model.realName, imgData: value, imgName: me.imageNames[index]}).then(function (request) {
               if (request.status === 200) {
-                this.showText = '图片正在上传...' + _index++;
+                this.showText = '图片正在上传...';
                 resolve(request.data);
               } else {
                 reject(Error(request.statusText));
@@ -183,6 +183,7 @@
             me.$vux.alert.show({content: '图片只能是jpg,gif,png'})
             return false;
           }
+          
           if (img.size > 1024 * 1024 * 3) {
             me.$vux.alert.show({content: '图片大小不可超过3M'})
             return false;
@@ -190,6 +191,7 @@
           var reader = new FileReader();
           reader.readAsDataURL(img);
           reader.onload = function (e) {
+             
             me.images.push(e.target.result);
             me.imageNames.push(img.name);
           }

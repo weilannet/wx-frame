@@ -4,11 +4,16 @@
     <div class="myreport-info">
 
       <div class="success">
-        <div  v-show="model.state==0"><icon type="info" class="icon_big"></icon>待处理</div>
-        <div  v-show="model.state==1"><icon type="info" class="icon_big"></icon>接收</div>
-        <div  v-show="model.state==2"><icon type="warn" class="icon_big"></icon>拒绝</div>
-        <div  v-show="model.state==3"><icon type="success" class="icon_big"></icon>患者确认就诊</div>
-        <div  v-show="model.state==4"><icon type="info" class="icon_big"></icon>患者爽约</div>
+        <div v-show="model.state==0">
+          <icon type="info" class="icon_big"></icon>待处理</div>
+        <div v-show="model.state==1">
+          <icon type="info" class="icon_big"></icon>接收</div>
+        <div v-show="model.state==2">
+          <icon type="warn" class="icon_big"></icon>拒绝</div>
+        <div v-show="model.state==3">
+          <icon type="success" class="icon_big"></icon>患者确认就诊</div>
+        <div v-show="model.state==4">
+          <icon type="info" class="icon_big"></icon>患者爽约</div>
       </div>
 
       <div class="arrange">
@@ -20,26 +25,26 @@
     </div>
 
     <group class="myreport-item">
-      <cell :title="model.realName+'&nbsp;&nbsp;'+(model.sex==0?'男':'女')+'&nbsp;&nbsp;'+model.age" >{{model.phone}}</cell>
+      <cell :title="model.realName+'&nbsp;&nbsp;'+(model.sex==0?'男':'女')+'&nbsp;&nbsp;'+model.age">{{model.phone}}</cell>
     </group>
-        <div class="myreport-title">基本诊断：</div>
-        <div class="myreport-content">
-          {{ model.checkInfo }}
-          <div  v-for="item in model.imagesPath" track-by="$index">
-              <img :src="item" alt="" />
-          </div>
-        </div>
+    <div class="myreport-title">基本诊断：</div>
+    <div class="myreport-content">
+      {{ model.checkInfo }}
+      <img class="previewer-demo-img" v-for="(index, item) in model.imagesPath" :src="item.src" width="100%" @click="$refs.previewer.show(index)">
+      <previewer :list="model.imagesPath" v-ref:previewer :options="options"></previewer>
+      <!--<div v-for="item in model.imagesPath" track-by="$index">
+        <img :src="item" alt="" />
+      </div>-->
+    </div>
 
     <!--<other-component/>-->
   </div>
 </template>
 <style>
-  body{
-
-  }
+  body {}
 </style>
 <script>
-  import { Group, Cell, Icon } from '../components'
+  import { Group, Cell, Icon, Previewer } from '../components'
   export default {
     created () {
       document.title = '病历详情'
@@ -48,6 +53,12 @@
         var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
         if (result.status) {
           Object.assign(this.model, result.data)
+          if (this.model.imagesPath && this.model.imagesPath.length > 0) {
+            
+            this.model.imagesPath = this.model.imagesPath.map(function(item) {
+              return { w: 300, h: 300, src:item };
+            });
+          }
           this.model.state = parseInt(this.model.state)
           switch (this.model.state) {
             case 0:
@@ -72,7 +83,8 @@
     components: {
       Group,
       Cell,
-      Icon
+      Icon,
+      Previewer
     },
     data () {
       return {
@@ -89,6 +101,21 @@
           bookTime: '',
           catetoryRoom: '',
           refuseInfo: ''
+        },
+        options: {
+          getThumbBoundsFn (index) {
+            // find thumbnail element
+            let thumbnail = document.querySelectorAll('.previewer-demo-img')[index];
+            // get window scroll Y
+            let pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
+            // optionally get horizontal scroll
+            // get position of element relative to viewport
+            let rect = thumbnail.getBoundingClientRect();
+            // w = width
+            return {x: rect.left, y: rect.top + pageYScroll, w: rect.width};
+            // Good guide on how to get element coordinates:
+            // http://javascript.info/tutorial/coordinates
+          }
         }
       }
     },
@@ -116,7 +143,7 @@
       font-size: 1.2rem;
       text-align: center;
       padding: 1rem 0;
-      color:#15cc00;
+      color: #15cc00;
       border-bottom: 1px solid #ebebeb;
     }
     .arrange {
@@ -125,19 +152,31 @@
     }
     background: #fff;
   }
+  
   .myreport-title {
     background: #fff;
     width: 100%;
     padding: 1rem 1rem;
     box-sizing: border-box;
   }
+  
   .myreport-content {
     background: #fff;
     width: 100%;
-    padding:0 1rem 1rem 1rem;
+    padding: 0 1rem 1rem 1rem;
     box-sizing: border-box;
   }
-  .myreport-content  img {
+  
+  .myreport-content img {
     width: 100%;
   }
+  
+  .pswp__img {
+    position: absolute;
+    width: 100% !important;
+    height: auto !important;
+    top: 0;
+    left: 0;
+  }
+
 </style>

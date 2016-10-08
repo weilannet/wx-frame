@@ -4,7 +4,7 @@
       <div class="confirmfont">
         <div class="success"><icon type="success" class="icon_big"></icon>{{model.signstate == 2 ? '参会' : '报名'}}成功</div>
         <br/>
-        <span>您以成功{{model.signstate == 2 ? '参会' : '报名'}}{{model.title}}会议！</span>
+        <span>您已成功{{model.signstate == 2 ? '参会' : '报名'}}{{model.title}}会议！</span>
         <br/>
         <span>请保存下方二维码做为参会唯一凭证！</span>
         <br/>
@@ -12,7 +12,7 @@
         <qrcode :value="model.code"></qrcode>
         <br/>
         <br/>
-        <span>会议识别码：{{model.code}}</span>
+        <span style="color: #666666; text-decoration: none; pointer-events: none;">会议识别码：{{model.code}}</span>
         <br/>
         <br/>
         <a v-link="'/meeting?_id=' + model.meetingId">查看会议详情</a>

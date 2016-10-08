@@ -104,7 +104,7 @@
           setTimeout(function () {
             me.$router.go(
               {
-                path: '/login',
+                path: '/myinfo',
                 params: null
               }
             )

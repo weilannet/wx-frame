@@ -7,17 +7,19 @@
     <div class="check-content">
       {{ model.checkInfo }}
     </div>
-    <div class="check-imglist" v-for="item in images" track-by="Math.random()*1000">
+    <!--<div class="check-imglist" v-for="item in images" track-by="Math.random()*1000">
       <img :src="item" alt="" />
-    </div>
+    </div>-->
+    <img class="previewer-demo-img" v-for="(index, item) in images" :src="item.src" width="100%" @click="$refs.previewer.show(index)">
+    <previewer :list="images" v-ref:previewer :options="options"></previewer>
 
     <div class="check-button">
       <flexbox>
         <flexbox-item>
-            <x-button :disabled="disablepass" type="primary" @click="btnPass">接收</x-button>
+          <x-button :disabled="disablepass" type="primary" @click="btnPass">接收</x-button>
         </flexbox-item>
         <flexbox-item>
-            <x-button :disabled="disablerefuse" type="warn" @click="btnRefuse">拒绝</x-button>
+          <x-button :disabled="disablerefuse" type="warn" @click="btnRefuse">拒绝</x-button>
         </flexbox-item>
       </flexbox>
     </div>
@@ -29,29 +31,31 @@
   body {}
 </style>
 <script>
-  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Flexbox, FlexboxItem } from '../components'
+  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Flexbox, FlexboxItem, Previewer } from '../components'
   export default {
     created () {
-      document.title = '病历审核'
-      Object.assign(this.model, this.$route.query)
+      document.title = '病历审核';
+      Object.assign(this.model, this.$route.query);
       this.$http.post('/getPatientInfo', {_id: this.model._id, check: true}).then(function (response) {
-        var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
+        var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
         if (result.status) {
-          Object.assign(this.model, result.data)
+          Object.assign(this.model, result.data);
           if (this.model.imagesPath && this.model.imagesPath.length > 0) {
-            this.images = this.model.imagesPath
-            this.disablepass = false
-            this.disablerefuse = false
+            this.images = this.model.imagesPath.map(function(item) {
+              return { w: 300, h: 300, src:item };
+            });
+            this.disablepass = false;
+            this.disablerefuse = false;
           }
           if (this.model.state > 0) {
-            this.$vux.toast.show({text: '该患者已被其他医生审核！', type: 'text', time: 1000, width: '20em'})
-            this.disablepass = true
-            this.disablerefuse = true
+            this.$vux.toast.show({text: '该患者已被其他医生审核！', type: 'text', time: 1000, width: '20em'});
+            this.disablepass = true;
+            this.disablerefuse = true;
           }
         } else {
-          this.$vux.alert.show({content: result.message})
-          this.disablepass = true
-          this.disablerefuse = true
+          this.$vux.alert.show({content: result.message});
+          this.disablepass = true;
+          this.disablerefuse = true;
         }
       }, function () {
       })
@@ -68,7 +72,8 @@
       Box,
       Icon,
       Flexbox,
-      FlexboxItem
+      FlexboxItem,
+      Previewer
     },
     data () {
       return {
@@ -147,25 +152,35 @@
     padding: 1rem 1rem;
     box-sizing: border-box;
   }
-
+  
   .check-content {
     background: #fff;
     width: 100%;
     padding: 0rem 1rem 1rem 1rem;
     box-sizing: border-box;
   }
-
+  
   .check-imglist {
     width: 100%;
     img {
       width: 100%;
     }
   }
-
+  
   .check-button {
     width: 100%;
     height: 2.6rem;
     position: fixed;
     bottom: 0
   }
+  
+  .pswp__img {
+    position: absolute;
+    width: 100% !important;
+    height: auto !important;
+    top: 0;
+    left: 0;
+  }
+  
+ 
 </style>
