@@ -85,7 +85,8 @@
           state: 0,
           checkInfo: '',
           imagesPath: [],
-          phone: ''
+          phone: '',
+          categoryEyes: ''
         },
         images: [],
         disablepass: false,
@@ -125,7 +126,7 @@
         this.$router.go(
           {
             path: '/checkreceive',
-            query: {_id: this.model._id}
+            query: {_id: this.model._id, categoryEyes: this.model.categoryEyes}
           }
         )
       },

@@ -5,6 +5,7 @@
       <popup-picker :title="titleSex" :data="lstSex" :value.sync="txtSex" @on-show="onShow" @on-hide="onHide" @on-change="onChange"></popup-picker>
       <x-input title="年龄" :value.sync="model.age" type="text" placeholder="请填写患者年龄" :min="1" :max="100" required v-ref:inputage></x-input>
       <x-input title="手机号码" :value.sync="model.phone" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile" required v-ref:inputmobile></x-input>
+      <popup-picker :title="titledepart" :data="lstdepart" :value.sync="txtdepart" @on-show="onShow" @on-hide="onHide"></popup-picker>
     </group>
 
     <group>
@@ -49,7 +50,32 @@
 <script>
   import { Loading, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, XTextarea } from '../components'
   import validlib from '../libs/validate'
+  var ajaxHelper = require('../libs/ajax')
+  const _ = require('underscore');
   export default {
+    created () {
+      document.title = '病历上报';
+      var me = this;
+      // ajax获取类别
+      ajaxHelper.sendAjax(
+        [ajaxHelper.createAjax('/getCateList', {category: '组别'})],
+        function (departData, roomData) {
+          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
+         if (!departData.status) {
+            return;
+          }       
+          //组别
+          me.ajaxdepartData = departData.data;
+          me.ajaxdepartData.forEach(function(item) { me.lstdepart[0].push(item.title)});
+
+          var existdepart = null;
+          if (me.model.categoryEyes && me.ajaxdepartData.length > 0) {
+              existdepart = _.where(me.ajaxdepartData, {_id: me.model.categoryEyes});
+          }
+          me.txtdepart = [(!me.model.categoryEyes || existdepart && existdepart.length ==0) ? '请选择类型' : existdepart[0].title];
+        }
+      )
+    },
     ready () {
     },
     components: {
@@ -73,7 +99,8 @@
           phone: '',
           checkInfo: '',
           imagesPath: '',
-          imagesName: null
+          imagesName: null,
+          categoryEyes: ''
         },
         images: [],
         imageNames: [],
@@ -85,7 +112,11 @@
         titleSubmit: '完成',
         disableSubmit: false,
         totalCount: 9,
-        currentCount: 0
+        currentCount: 0,
+        titledepart: '疑似疾病类型',
+        txtdepart: ['请选择类型'],
+        lstdepart: [['请选择类型']],
+        ajaxdepartData: null,
       }
     },
     methods: {
@@ -105,10 +136,15 @@
         if (!validlib(this)) {
           return;
         }
+        if (!this.lstdepart[0].indexOf(this.txtdepart[0])) {
+          this.$vux.toast.show({text:  `请选择${this.titledepart}！`, type: 'text', time: 1000, width: '20em'});
+          return;
+        }
         if (!this.model.checkInfo) {
           this.$vux.toast.show({text: '请输入诊断信息！', type: 'text', time: 1000, width: '20em'});
           return;
         }
+        
         this.showLoading = true;
         this.showText = '正在连接服务器...';
         this.titleSubmit = '正在提交';
@@ -130,6 +166,7 @@
         
         Promise.all(imagesAjax).then(values => {
           me.model.sex = me.lstSex[0].indexOf(me.txtSex[0]);
+          me.model.categoryEyes = _.where(me.ajaxdepartData, {title: me.txtdepart[0]})[0]._id;
           me.model.imagesPath = values;
           me.model.imagesName = me.imageNames;
           
@@ -163,13 +200,13 @@
       },
       preImg (event) {
         if (!this.model.realName) {
-          this.$vux.alert.show({content: '请先填写病人名称！'});
+          this.$vux.toast.show({text: '请先填写病人名称！', type: 'text', time: 1000, width: '20em'});
           return false;
         }
         var me = this;
         me.currentCount += event.target.files.length;
         if (this.currentCount > 9) {
-          this.$vux.alert.show({content: '最多可选择9张图片，请重新选择！'});
+          this.$vux.toast.show({text: '最多可选择9张图片，请重新选择！', type: 'text', time: 1000, width: '20em'});
           me.currentCount = 0;
           return false;
         }
@@ -180,12 +217,12 @@
         imgArr.forEach(function (img) {
           // 判断图片格式
           if (!(img.type.indexOf('image') === 0 && img.type && /\.(?:jpg|jpeg|png|gif)$/.test(img.name.toLowerCase()))) {
-            me.$vux.alert.show({content: '图片只能是jpg,gif,png'})
+            this.$vux.toast.show({text: '图片只能是jpg,gif,png！', type: 'text', time: 1000, width: '20em'});
             return false;
           }
           
           if (img.size > 1024 * 1024 * 3) {
-            me.$vux.alert.show({content: '图片大小不可超过3M'})
+            this.$vux.toast.show({text: '图片大小不可超过3M！', type: 'text', time: 1000, width: '20em'});
             return false;
           }
           var reader = new FileReader();
