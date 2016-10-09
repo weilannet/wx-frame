@@ -55,8 +55,8 @@
               existrooms = _.where(me.ajaxroomData, {_id: me.model.categoryRoom});
           }
       
-          me.txtdepart = [(!me.model.categoryEyes || existdepart && existdepart.length ==0) ? '请选择科室' : existdepart[0].title];
-          me.txtroom = [(!me.model.categoryRoom || existrooms && existrooms.length ==0) ? '请选择职称' : existrooms[0].title];
+          me.txtdepart = [(!me.model.categoryEyes || existdepart && existdepart.length ==0) ? '请选择组别' : existdepart[0].title];
+          me.txtroom = [(!me.model.categoryRoom || existrooms && existrooms.length ==0) ? '请选择诊室' : existrooms[0].title];
 
           // me.lstdepart = [['眼底组1', '青光眼组1', '眼外伤组1']]
           // me.lstdepart[0].unshift('请选择组别')
