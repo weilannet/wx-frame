@@ -7,11 +7,14 @@
     <div class="check-content">
       {{ model.checkInfo }}
     </div>
-    <!--<div class="check-imglist" v-for="item in images" track-by="Math.random()*1000">
-      <img :src="item" alt="" />
-    </div>-->
-    <img class="previewer-demo-img" v-for="(index, item) in images" :src="item.src" width="100%" @click="$refs.previewer.show(index)">
-    <previewer :list="images" v-ref:previewer :options="options"></previewer>
+    
+    <div class="check-imglist" v-for="(index, item) in images" track-by="Math.random()*1000">
+      <span class="imgloading" style="font-size:20px;">Loading</span>
+      <x-img :src="item.src" width="100%" @click="$refs.previewer.show(index)" @on-success="success" @on-error="error" class="ximg-demo previewer-demo-img"
+        error-class="ximg-error" :offset="-100"></x-img>
+      <!--<img class="previewer-demo-img" v-for="(index, item) in images" :src="item.src" width="100%" @click="$refs.previewer.show(index)">-->
+      <previewer :list="images" v-ref:previewer :options="options"></previewer>
+    </div>
 
     <div class="check-button">
       <flexbox>
@@ -31,7 +34,7 @@
   body {}
 </style>
 <script>
-  import { Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Flexbox, FlexboxItem, Previewer } from '../components'
+  import { XImg, Selector, PopupPicker, XInput, Group, XButton, Cell, Box, Icon, Flexbox, FlexboxItem, Previewer } from '../components'
   export default {
     created () {
       document.title = '病历审核';
@@ -63,6 +66,7 @@
     ready () {
     },
     components: {
+      XImg,
       Selector,
       PopupPicker,
       XInput,
@@ -109,6 +113,17 @@
       }
     },
     methods: {
+      error (src, ele, msg) {
+        console.log('error load', msg, src)
+        const span = ele.parentNode.querySelector('.imgloading')
+        span.innerText = 'load error'
+      },
+      success (src, ele) {
+        console.log('success load', src)
+          
+        const span = ele.parentNode.querySelector('.imgloading')
+        ele.parentNode.removeChild(span)
+      },
       onChange (val) {
         console.log(val)
       },
@@ -183,5 +198,23 @@
     left: 0;
   }
   
- 
+  .ximg-demo {
+    width: 100%;
+    height: auto;
+  }
+  
+  .ximg-error {
+    background-color: yellow;
+  }
+  
+  .ximg-error:after {
+    content: '加载失败';
+    color: red;
+  }
+  
+  .imgloading {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
 </style>
