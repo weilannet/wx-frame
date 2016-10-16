@@ -1,7 +1,7 @@
 <template>
   <div>
     <group>
-      <cell :title="model.realName+'&nbsp;&nbsp;'+(model.sex==0?'男':'女')+'&nbsp;&nbsp;'+model.age" :value="model.phone"></cell>
+      <cell :title="model.realName+'&nbsp;&nbsp;'+(model.sex==1?'男':'女')+'&nbsp;&nbsp;'+model.age" :value="model.phone"></cell>
     </group>
     <div class="check-title">基本诊断：</div>
     <div class="check-content">

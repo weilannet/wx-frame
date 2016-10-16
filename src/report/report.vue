@@ -106,7 +106,7 @@
         imageNames: [],
         titleSex: '性别',
         txtSex: ['男'],
-        lstSex: [['男', '女']],
+        lstSex: [['女', '男']],
         showLoading: false,
         showText: '',
         titleSubmit: '完成',
