@@ -4,7 +4,8 @@
       <div class="confirmfont">
         <div class="success"><icon type="success" class="icon_big"></icon>{{model.signstate == 2 ? '参会' : '报名'}}成功</div>
         <br/>
-        <span>您已成功{{model.signstate == 2 ? '参会' : '报名'}}{{model.title}}会议！</span>
+        <span>您已成功{{model.signstate == 2 ? '参会' : '报名'}}</span><br/>
+        <h3>{{model.title}}会议</h3>
         <br/>
         <span>请保存下方二维码做为参会唯一凭证！</span>
         <br/>

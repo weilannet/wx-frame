@@ -68,74 +68,74 @@
           return
         }
         if (parseInt(this.txtcode) !== parseInt(this.txtcode2)) {
-          this.$vux.toast.show({text: '验证码输入有误！', type: 'text', time: 1000, width: '20em'})
-          return
+          this.$vux.toast.show({text: '验证码输入有误！', type: 'text', time: 1000, width: '20em'});
+          return;
         }
-        this.submittext = '正在提交'
-        this.submitdisable = true
-        var me = this
+        this.submittext = '正在提交';
+        this.submitdisable = true;
+        var me = this;
         var data = {
           phone: this.txtmobile
         }
         this.$http.post('/updatePhone', data).then(function (response) {
-          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-          this.submitdisable = false
-          this.submittext = '保存'
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
+          this.submitdisable = false;
+          this.submittext = '保存';
           if (!result.status) {
-            this.$vux.alert.show({content: result.message})
-            return
+            this.$vux.alert.show({content: result.message});
+            return;
           }
-          this.$vux.toast.show({text: '修改成功！', type: 'text', time: 500, width: '20em'})
+          this.$vux.toast.show({text: '修改成功！', type: 'text', time: 500, width: '20em'});
           setTimeout(function () {
             me.$router.go(
               {
                 path: '/login',
                 params: null
               }
-            )
-          }, 500)
+            );
+          }, 500);
         })
       },
       finish (index) {
         if (this.interval) {
-          clearInterval(this.interval)
+          clearInterval(this.interval);
         }
-        this.codevalue = '获取验证码'
-        this.codedisable = false
-        this.time = this.origintime
+        this.codevalue = '获取验证码';
+        this.codedisable = false;
+        this.time = this.origintime;
       },
       pwdChange (val) {
-        this.txtpwd2 = ''
+        this.txtpwd2 = '';
       },
       phoneChange (val) {
-        this.txtcode = ''
+        this.txtcode = '';
       },
       codeClick () {
         if (!this.$refs.inputmobile.valid) {
-          this.$vux.toast.show({ text: '请正确填写手机号码！', type: 'text', time: 1000, width: '20em' })
-          return false
+          this.$vux.toast.show({ text: '请正确填写手机号码！', type: 'text', time: 1000, width: '20em' });
+          return false;
         }
-        this.codedisable = true
+        this.codedisable = true;
         var data = {
           mobile: this.txtmobile
         }
         this.$http.post('/getSMSCode', data).then(function (response) {
-          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
           if (!result.status) {
-            this.$vux.alert.show({content: result.message})
-            return
+            this.$vux.alert.show({content: result.message});
+            return;
           }
-          this.txtcode2 = result.data
+          this.txtcode2 = result.data;
         })
-        this.codedisable = true
-        let _this = this
+        this.codedisable = true;
+        let _this = this;
         this.interval = setInterval(function () {
           if (_this.time > 0) {
-            _this.change(_this.time--)
+            _this.change(_this.time--);
           } else {
-            _this.finish()
+            _this.finish();
           }
-        }, 1000)
+        }, 1000);
       }
     }
   }

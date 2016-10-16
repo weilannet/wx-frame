@@ -10,3 +10,5 @@ dist/components-commonjs/
 /site
 /dev
 /build
+
+./logs

@@ -1,7 +1,11 @@
 <template>
   <div>
+    <div v-show="isshow" class="nomeeting">
+      <div><icon type="info"></icon>暂无会议！</div>
+      
+   </div>
     <!--<header-component/>-->
-   <div class="meeting">
+   <div v-show="!isshow" class="meeting">
 
      <div class="meeting-title">
        {{model.title}}
@@ -15,32 +19,39 @@
      </div>
 
    </div>
-  <box  class="meeting-sign">
+  <box v-show="!isshow" class="meeting-sign">
     <x-button :disabled="submitdisable" :text="txtmeeting"  type="primary" @click="btnClick"></x-button>
   </box>
 </div>
 
 </template>
 <script>
-  import { XButton, Box } from '../components'
+  import { XButton, Box, Icon } from '../components'
   export default {
     created () {
-      document.title = '会议报名'
+      document.title = '会议报名';
       this.$http.post('/getMeetingInfo', null).then(function (response) {
-        var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
+        var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
+           
         if (result.status) {
-          Object.assign(this.model, result.data)
-          this.submitdisable = false
+          Object.assign(this.model, result.data);
+          this.submitdisable = false;
+          // 不显示暂无会议
+          this.isshow = false;
+
           if (this.model.code) {
-            this.issign = true
-            this.txtmeeting = this.model.signstate == 1 ? '已报名，点击查看二维码' : '已参会，点击查看二维码'
+            this.issign = true;
+            this.txtmeeting = this.model.signstate == 1 ? '已报名，点击查看二维码' : '已参会，点击查看二维码';
             return
           }
-          this.issign = false
+          this.issign = false;
+          
         } else {
-          this.$vux.alert.show({content: result.message})
-          this.txtmeeting = '不可报名'
-          this.submitdisable = true
+          // 显示暂无会议
+          this.isshow = true;
+          // this.$vux.alert.show({content: result.message})
+          this.txtmeeting = '不可报名';
+          this.submitdisable = true;
         }
       })
     },
@@ -48,7 +59,8 @@
     },
     components: {
       XButton,
-      Box
+      Box,
+      Icon
     },
     data () {
       return {
@@ -59,8 +71,11 @@
           content: '',
           state: 0,
           code: '',
-          codeUrl: ''
+          codeUrl: '',
         },
+        //控制会议的层显示
+        isshow: true,
+        //控制会议状态
         issign: false,
         submitdisable: false,
         txtmeeting: '报名参加'
@@ -74,8 +89,8 @@
               path: '/meetingconfirm',
               params: { meetingId: this.model._id },
               query: { meetingId: this.model._id }
-            })
-          return
+            });
+          return;
         }
         // meetingconfirm
         this.$router.go(
@@ -83,7 +98,7 @@
             path: '/result',
             params: { meetingId: this.model._id, code: this.model.code, title: this.model.title, signstate: this.model.signstate },
             query: { meetingId: this.model._id, code: this.model.code, title: this.model.title, signstate: this.model.signstate }
-          })
+          });
       }
     }
   }
@@ -112,6 +127,12 @@
     height:2.6rem;
     position: fixed;
     bottom:0
+  }
+
+  .nomeeting {
+    margin: 30px auto;
+    text-align: center;
+    font-size: 12px; 
   }
 
 </style>

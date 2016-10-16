@@ -3,7 +3,7 @@
     <!--<header-component/>-->
 
     <group title="">
-      <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" @change="phoneChange"  required v-ref:inputmobile></x-input>
+      <x-input title="手机号码" name="mobile" :max="11" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" @change="phoneChange"  required v-ref:inputmobile></x-input>
     </group>
     <group title="">
 

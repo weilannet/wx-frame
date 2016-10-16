@@ -3,7 +3,7 @@
     <!--<header-component/>-->
 
     <group title="">
-      <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" @change="phoneChange" required v-ref:inputmobile></x-input>
+      <x-input title="手机号码" :max="11" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" @change="phoneChange" required v-ref:inputmobile></x-input>
     </group>
     <group title="">
 
@@ -69,23 +69,23 @@
     },
     methods: {
       change (val) {
-        this.codevalue = val + '秒后再获取'
+        this.codevalue = val + '秒后再获取';
       },
       btnSubmit () {
         if (!this.openid) {
-          this.$vux.toast.show({text: '请从微信客户端登录注册！', type: 'text', time: 1000, width: '20em'})
-          return
+          this.$vux.toast.show({text: '请从微信客户端登录注册！', type: 'text', time: 1000, width: '20em'});
+          return;
         }
         if (!validlib(this)) {
-          return
+          return;
         }
         if (parseInt(this.txtcode) !== parseInt(this.txtcode2)) {
-          this.$vux.toast.show({text: '验证码输入有误！', type: 'text', time: 1000, width: '20em'})
-          return
+          this.$vux.toast.show({text: '验证码输入有误！', type: 'text', time: 1000, width: '20em'});
+          return;
         }
-        var me = this
-        this.submittext = '正在提交'
-        this.submitdisable = true
+        var me = this;
+        this.submittext = '正在提交';
+        this.submitdisable = true;
         var data = {
           phone: this.txtmobile,
           password: this.txtpwd,
@@ -93,14 +93,14 @@
         }
 
         this.$http.post('/register', data).then(function (response) {
-          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-          this.submitdisable = false
-          this.submittext = '注册'
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
+          this.submitdisable = false;
+          this.submittext = '注册';
           if (!result.status) {
-            this.$vux.alert.show({content: result.message})
-            return
+            this.$vux.alert.show({content: result.message});
+            return;
           }
-          this.$vux.toast.show({text: '注册成功！', type: 'text', time: 500, width: '20em'})
+          this.$vux.toast.show({text: '注册成功！', type: 'text', time: 500, width: '20em'});
           setTimeout(function () {
             me.$router.go(
               {
@@ -108,48 +108,48 @@
                 params: null
               }
             )
-          }, 500)
+          }, 500);
         })
       },
       finish (index) {
         if (this.interval) {
-          clearInterval(this.interval)
+          clearInterval(this.interval);
         }
-        this.codevalue = '获取验证码'
-        this.codedisable = false
-        this.time = this.origintime
+        this.codevalue = '获取验证码';
+        this.codedisable = false;
+        this.time = this.origintime;
       },
       pwdChange (val) {
-        this.txtpwd2 = ''
+        this.txtpwd2 = '';
       },
       phoneChange (val) {
-        this.txtcode = ''
+        this.txtcode = '';
       },
       codeClick () {
         if (!this.$refs.inputmobile.valid) {
-          this.$vux.toast.show({ text: '请正确填写手机号码！', type: 'text', time: 1000, width: '20em' })
-          return false
+          this.$vux.toast.show({ text: '请正确填写手机号码！', type: 'text', time: 1000, width: '20em' });
+          return false;
         }
-        this.codedisable = true
-        let me = this
+        this.codedisable = true;
+        let me = this;
         var data = {
           mobile: this.txtmobile
         }
         this.$http.post('/getSMSCode', data).then(function (response) {
-          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
+          var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
           if (!result.status) {
-            this.$vux.alert.show({content: result.message})
-            return
+            this.$vux.alert.show({content: result.message});
+            return;
           }
-          this.txtcode2 = result.data
+          this.txtcode2 = result.data;
         })
         this.interval = setInterval(function () {
           if (me.time > 0) {
-            me.change(me.time--)
+            me.change(me.time--);
           } else {
-            me.finish()
+            me.finish();
           }
-        }, 1000)
+        }, 1000);
       }
     }
   }

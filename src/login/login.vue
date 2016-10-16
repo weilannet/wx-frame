@@ -3,7 +3,7 @@
     <!--<header-component/>-->
 
     <group title="">
-      <x-input title="手机号码" name="mobile" required :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-ref:inputmobile></x-input>
+      <x-input title="手机号码" name="mobile" :max="11" required :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-ref:inputmobile></x-input>
     </group>
     <group title="">
       <x-input title="密码" type="password" placeholder="请输入密码" :value.sync="txtpwd" :min="6" v-ref:inputpassword></x-input>

@@ -12,7 +12,7 @@
 
     <div class="confirmfont">
       <div><icon type="info"></icon>请确保以上信息真实有效，该信息将作为报名此会议的唯一凭证</div>
-      <a v-link="{ path: '/myinfo' }">修改个人信息</a>
+      <a @click="btnUpdateInfo">修改个人信息</a>
     </div>
     <box gap="30px 10px">
       <x-button :disabled="submitdisable"  :text="txtsubmit"  type="primary" @click="btnSubmit"></x-button>
@@ -34,23 +34,23 @@
 
   export default {
     created () {
-      document.title = '确认报名'
-      var me = this
-      document.title = '身份认证'
+      document.title = '确认报名';
+      var me = this;
+      document.title = '身份认证';
       ajaxHelper.sendAjax(
         [ajaxHelper.createAjax('/getUserInfo'),
         ajaxHelper.createAjax('/getCateList', {category: '科室'}),
         ajaxHelper.createAjax('/getCateList', {category: '职称'})],
         function (userData, departData, professorData) {
-          userData = (typeof userData === 'string') ? JSON.parse(userData) : userData
-          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
-          professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData
-          Object.assign(me.model, userData.data)
+          userData = (typeof userData === 'string') ? JSON.parse(userData) : userData;
+          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData;
+          professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData;
+          Object.assign(me.model, userData.data);
           me.txtaddress = [
             !me.model.province ? '110000' : me.model.province,
             !me.model.city ? '110100' : me.model.city,
             !me.model.area ? '110101' : me.model.area
-          ] 
+          ] ;
 
           if (!departData.status || !professorData.status) {
             return;
@@ -120,6 +120,14 @@
       },
       onHide (type) {
         console.log('on hide', type)
+      },
+      btnUpdateInfo() {
+        this.$router.go(
+          {
+            path: '/myinfo',
+            query: this.$route.query
+          }
+        );
       },
       btnSubmit () {
         var me = this
