@@ -32,7 +32,7 @@
       {{ model.checkInfo }}
 
       <div class="check-imglist" v-for="(index, item) in model.imagesPath" track-by="Math.random()*1000">
-        <span class="imgloading" style="font-size:20px;">Loading</span>
+        <span class="imgloading" style="font-size:20px;">加载中</span>
         <x-img :src="item.src" width="100%" @click="$refs.previewer.show(index)" @on-success="success" @on-error="error" class="ximg-demo previewer-demo-img"
           error-class="ximg-error" :offset="-100"></x-img>
         <!--<img class="previewer-demo-img" v-for="(index, item) in images" :src="item.src" width="100%" @click="$refs.previewer.show(index)">-->

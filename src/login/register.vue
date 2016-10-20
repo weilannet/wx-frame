@@ -2,7 +2,7 @@
   <div>
     <!--<header-component/>-->
 
-    <group title="">
+    <group title="请正确填写患者手机号码，此号码将作为通知患者的唯一联系方式">
       <x-input title="手机号码" :max="11" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" @change="phoneChange" required v-ref:inputmobile></x-input>
     </group>
     <group title="">
@@ -100,6 +100,8 @@
             this.$vux.alert.show({content: result.message});
             return;
           }
+          
+          localStorage['APP_SUCCESS'] = result.data._id;
           this.$vux.toast.show({text: '注册成功！', type: 'text', time: 500, width: '20em'});
           setTimeout(function () {
             me.$router.go(
@@ -138,18 +140,21 @@
         this.$http.post('/getSMSCode', data).then(function (response) {
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
           if (!result.status) {
-            this.$vux.alert.show({content: result.message});
+            this.codedisable = false;
+            this.$vux.toast.show({text: result.message, type: 'text', time: 500, width: '20em'});
             return;
           }
           this.txtcode2 = result.data;
-        })
-        this.interval = setInterval(function () {
+          
+          this.interval = setInterval(function () {
           if (me.time > 0) {
             me.change(me.time--);
           } else {
             me.finish();
           }
         }, 1000);
+        });
+        
       }
     }
   }

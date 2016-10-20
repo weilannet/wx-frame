@@ -3,8 +3,9 @@
     <group title="">
       <x-input title="姓名" :value.sync="model.realName" placeholder="请填写患者姓名" is-type="china-name" required v-ref:inputname></x-input>
       <popup-picker :title="titleSex" :data="lstSex" :value.sync="txtSex" @on-show="onShow" @on-hide="onHide" @on-change="onChange"></popup-picker>
-      <x-input title="年龄" :value.sync="model.age" type="text" placeholder="请填写患者年龄" :min="1" :max="100" required v-ref:inputage></x-input>
-      <x-input title="手机号码" :value.sync="model.phone" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile" required v-ref:inputmobile></x-input>
+      <x-input title="年龄" :value.sync="model.age" type="text" placeholder="请填写患者年龄" :min="1" :max="120" required v-ref:inputage></x-input>
+      <x-input title="手机号码" :value.sync="model.phone" placeholder="请填写患者手机号" keyboard="number" is-type="china-mobile" required
+        v-ref:inputmobile></x-input>
       <popup-picker :title="titledepart" :data="lstdepart" :value.sync="txtdepart" @on-show="onShow" @on-hide="onHide"></popup-picker>
     </group>
 
@@ -133,6 +134,10 @@
         console.log('on hide', type);
       },
       btnSubmit () {
+        if (this.model.age && (this.model.age <= 0 || this.model.age > 120)) {
+          this.$vux.toast.show({text: '年龄只允许输入0-120之间的数字！', type: 'text', time: 1000, width: '20em'});
+          return false;
+        }
         if (!validlib(this)) {
           return;
         }
@@ -170,7 +175,7 @@
           me.model.imagesPath = values;
           me.model.imagesName = me.imageNames;
           
-          this.showText = '图片上传完成,数据提交中...';
+          this.showText = '数据提交中...';
           me.$http.post('/report', me.model).then(function (response) {
             this.showText = '';
             this.showLoading = false;

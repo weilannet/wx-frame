@@ -2,7 +2,7 @@
   <div>
     <!--<header-component/>-->
 
-    <group title="">
+    <group title="请正确填写患者手机号码，此号码将作为通知患者的唯一联系方式">
       <x-input title="手机号码" name="mobile" :value.sync="txtmobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" @change="phoneChange"  required v-ref:inputmobile></x-input>
     </group>
     <group title="">

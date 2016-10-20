@@ -9,14 +9,14 @@
     </div>
     
     <div class="check-imglist" v-for="(index, item) in images" track-by="Math.random()*1000">
-      <span class="imgloading" style="font-size:20px;">Loading</span>
+      <span class="imgloading" style="font-size:20px;">加载中</span>
       <x-img :src="item.src" width="100%" @click="$refs.previewer.show(index)" @on-success="success" @on-error="error" class="ximg-demo previewer-demo-img"
         error-class="ximg-error" :offset="-100"></x-img>
       <!--<img class="previewer-demo-img" v-for="(index, item) in images" :src="item.src" width="100%" @click="$refs.previewer.show(index)">-->
       <previewer :list="images" v-ref:previewer :options="options"></previewer>
     </div>
 
-    <div class="check-button">
+    <div class="check-button" v-show="!disablerefuse">
       <flexbox>
         <flexbox-item>
           <x-button :disabled="disablepass" type="primary" @click="btnPass">接收</x-button>

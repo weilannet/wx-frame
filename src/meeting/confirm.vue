@@ -131,7 +131,7 @@
       },
       btnSubmit () {
         var me = this
-        console.log(me.$route.query.meetingId)
+         
         this.txtsubmit = '正在提交'
         this.submitdisable = true
         this.$http.post('/signMeeting', { meetingId: me.$route.query.meetingId }).then(function (response) {
