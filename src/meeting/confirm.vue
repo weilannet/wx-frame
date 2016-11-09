@@ -46,6 +46,21 @@
           departData = (typeof departData === 'string') ? JSON.parse(departData) : departData;
           professorData = (typeof professorData === 'string') ? JSON.parse(professorData) : professorData;
           Object.assign(me.model, userData.data);
+          
+          //信息不完善加入验证
+          if (!me.model.realName || !me.model.hospital || !me.model.department || !me.model.position) {
+             me.$vux.alert.show({content: '个人信息不完善，请先完善个人信息！'});
+             setTimeout(function () {
+                me.$router.go(
+                  {
+                    path: '/myinfo',
+                    query: me.$route.query
+                  }
+                );
+             },100);
+            return;
+          }
+ 
           me.txtaddress = [
             !me.model.province ? '110000' : me.model.province,
             !me.model.city ? '110100' : me.model.city,
@@ -116,10 +131,10 @@
     },
     methods: {
       onShow () {
-        console.log('on show')
+        console.log('on show');
       },
       onHide (type) {
-        console.log('on hide', type)
+        console.log('on hide', type);
       },
       btnUpdateInfo() {
         this.$router.go(
@@ -130,17 +145,17 @@
         );
       },
       btnSubmit () {
-        var me = this
+        var me = this;
          
-        this.txtsubmit = '正在提交'
-        this.submitdisable = true
+        this.txtsubmit = '正在提交';
+        this.submitdisable = true;
         this.$http.post('/signMeeting', { meetingId: me.$route.query.meetingId }).then(function (response) {
-          console.log(response.data)
+          //console.log(response.data)
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
-          this.submitdisable = false
+          this.submitdisable = false;
           if (!result.status) {
-            this.$vux.alert.show({content: result.message})
-            return
+            this.$vux.alert.show({content: result.message});
+            return;
           }
           setTimeout(function () {
             me.$router.go(
@@ -150,12 +165,11 @@
                 query: { meetingId: result.data.meetingId, code: result.data.code, title: result.data.title }
               }
             )
-          }, 500)
-        }, function () {
-        })
+          }, 500);
+        });
       },
       getName (value) {
-        return value2name(value, AddressChinaData)
+        return value2name(value, AddressChinaData);
       }
     }
   }

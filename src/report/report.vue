@@ -59,9 +59,19 @@
       var me = this;
       // ajax获取类别
       ajaxHelper.sendAjax(
-        [ajaxHelper.createAjax('/getCateList', {category: '组别'})],
-        function (departData, roomData) {
-          departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
+        [
+          ajaxHelper.createAjax('/getUserInfo'),
+          ajaxHelper.createAjax('/getCateList', {category: '组别'})
+        ],
+        function (userData, departData) { 
+         userData = (typeof userData === 'string') ? JSON.parse(userData) : userData;
+         //信息不完善加入验证
+          if (!userData.data.realName || !userData.data.hospital || !userData.data.department || !userData.data.position) {
+             me.$vux.alert.show({content: '个人信息不完善，请先完善个人信息！'});
+             me.disableSubmit = true;
+             return;
+         }
+         departData = (typeof departData === 'string') ? JSON.parse(departData) : departData
          if (!departData.status) {
             return;
           }       
