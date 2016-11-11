@@ -42,7 +42,7 @@
           if (this.model.code) {
             this.issign = true;
             this.txtmeeting = this.model.signstate == 1 ? '已报名，点击查看二维码' : '已参会，点击查看二维码';
-            return
+            return;
           }
           this.issign = false;
           

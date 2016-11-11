@@ -158,7 +158,7 @@
             return;
           }
           setTimeout(function () {
-            me.$router.go(
+            me.$router.replace(
               {
                 path: '/result',
                 params: { meetingId: result.data.meetingId, code: result.data.code, title: result.data.title },
