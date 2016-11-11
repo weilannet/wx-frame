@@ -19,7 +19,7 @@
         <a v-link="'/meeting?_id=' + model.meetingId">查看会议详情</a>
       </div>
       <box gap="30px 10px">
-        <a v-link="{ path: '/meeting' }"><x-button  :text="txtsubmit"  type="primary" ></x-button></a>
+        <x-button :text="txtsubmit" @click="btnClick" type="primary" ></x-button>
       </box>
 
     <!--<other-component/>-->
@@ -58,6 +58,11 @@
       }
     },
     methods: {
+      btnClick () {
+        setTimeout(function () {
+          wx && wx.closeWindow();
+        }, 500);
+      }
     }
   }
 </script>
