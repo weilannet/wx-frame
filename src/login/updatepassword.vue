@@ -125,7 +125,7 @@
         var data = {
           mobile: this.txtmobile
         }
-        this.$http.post('/getSMSCode', data).then(function (response) {
+        this.$http.post('/getSMSCode/1', data).then(function (response) {
           var result = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
           if (!result.status) {
             this.$vux.alert.show({content: result.message})
